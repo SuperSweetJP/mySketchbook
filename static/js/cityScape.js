@@ -1,4 +1,6 @@
-let camera, scene, renderer, stats, parameters, controls, mouse, raycaster;
+let camera, scene, renderer, stats, snowParameters, controls, mouse, raycaster;
+const snowMaterials = [];
+snowObjects = [];
 
 var horizontalOffset = 0;
 var storyHeight = 1;
@@ -62,6 +64,8 @@ function init()
 
   const ambientLight = new THREE.AmbientLight(0xffffff);
   scene.add(ambientLight)
+
+  //scene.fog = new THREE.FogExp2( 0x000000, 0.005 );
 
   //const gridHelper = new THREE.GridHelper(200, 50);
   //scene.add(gridHelper)
@@ -197,6 +201,63 @@ function onMouseMove( event ) {
   mousePosY = mouse.y;
 }
 
+function initSnow()
+{
+  const geometry = new THREE.BufferGeometry();
+  const vertices = [];
+
+  const textureLoader = new THREE.TextureLoader();
+
+  //const sprite1 = textureLoader.load( '../static/img/sprites/snowflake1.png' );
+  //const sprite2 = textureLoader.load( '../static/img/sprites/snowflake2.png' );
+  //const sprite3 = textureLoader.load( '../static/img/sprites/snowflake3.png' );
+  const sprite4 = textureLoader.load( '../static/img/sprites/snowflake6.png' );
+  //const sprite5 = textureLoader.load( '../static/img/sprites/snowflake5.png' );
+
+  for ( let i = 0; i < 5000; i ++ ) {
+
+      const x = Math.random() * 2000 - 1000;
+      //const x = getRandomIntInclusive(cameraPosX + 200, 1000, 1);
+      const y = Math.random() * 2000 - 1000;
+      //const y = getRandomIntInclusive(cameraPosY + 200, 1000, 1);
+      const z = Math.random() * 2000 - 1000;
+      //const z = getRandomIntInclusive(cameraPosZ + 200, 1000, 1);
+
+      vertices.push( x, y, z );
+
+  }
+
+  geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+
+  snowParameters = [
+      //[[ 1.0, 0.2, 0.5 ], sprite2, 20 ],
+      [[ 0.95, 0.1, 0.2 ], sprite4, 15 ],
+      [[ 1, 0.05, 0.1 ], sprite4, 10 ],
+      [[ 0.85, 0, 0.08 ], sprite4, 8 ],
+      [[ 1, 0, 0.05 ], sprite4, 5 ]
+  ];
+
+  for ( let i = 0; i < snowParameters.length; i ++ ) {
+
+      const color = snowParameters[ i ][ 0 ];
+      const sprite = snowParameters[ i ][ 1 ];
+      const size = snowParameters[ i ][ 2 ];
+
+      snowMaterials[ i ] = new THREE.PointsMaterial( { size: size, map: sprite, blending: THREE.AdditiveBlending, depthTest: false, transparent: true } );
+      snowMaterials[ i ].color.setHSL( color[ 0 ], color[ 1 ], color[ 2 ] );
+
+      const particles = new THREE.Points( geometry, snowMaterials[ i ] );
+
+      particles.rotation.x = Math.random() * 6;
+      particles.rotation.y = Math.random() * 6;
+      particles.rotation.z = Math.random() * 6;
+
+      scene.add( particles );
+      snowObjects.push(particles);
+  }
+
+}
+
 function animate() {
 	// update the picking ray with the camera and mouse position
 	raycaster.setFromCamera( mouse, camera );
@@ -204,6 +265,7 @@ function animate() {
 	// calculate objects intersecting the picking ray
 	const intersects = raycaster.intersectObjects( scene.children );
 
+  //turn on lights on mouseover
   if(intersects.length > 0 && intersects[ 0 ].object.geometry.type == 'BoxGeometry')
   {
     if(mouseOverObject != intersects[ 0 ].object)
@@ -238,16 +300,26 @@ function animate() {
     mouseOverObject = null;
   }
 
-  //curCameraPosX = 60  + mousePosX;
-  //console.log(curCameraPosX);
+  //animate snow
+  const time = Date.now() * 0.00005;
+  for ( let i = 0; i < snowObjects.length; i ++ ) {
+    const object = snowObjects[ i ];
+    if ( object instanceof THREE.Points ) {
+        object.rotation.y = time * ( i < 4 ? i + 1 : - ( i + 1 ) );
+    }
+  }
   
-  camera.position.x = cameraPosX + mousePosX;
-  camera.position.y = cameraPosY + mousePosY;
-  camera.position.z = cameraPosZ;
-  console.log(camera.position);
+  if(mousePosX && mousePosY)
+  {
+    camera.position.x = cameraPosX + mousePosX;
+    camera.position.y = cameraPosY + mousePosY;
+    camera.position.z = cameraPosZ;
+  }
+
+  console.log(mousePosX);
 
   requestAnimationFrame( animate );
-  controls.update();
+  //controls.update();
   renderer.render( scene, camera );
 }
 
@@ -268,6 +340,7 @@ function onWindowResize() {
 //ToDo: some sort of game with windows. store number of cubes, if all lit up, turn them all off?
 
 init();
+initSnow();
 
 generateBuildingRow(startPosX, startPosY, startPosZ, 10);
 //generateBuildingRow(startPosX, startPosY, startPosZ + maxBuildingWidth * storyHeight + 10, 10);
