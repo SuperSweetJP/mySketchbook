@@ -28,9 +28,13 @@ var originalMouseOverObjMaterial;
 
 var mousePosX;
 var mousePosY;
+var mouseMod = 0.3;
 var cameraPosX = 59.7;
 var cameraPosY = 20.6;
 var cameraPosZ = 36.5;
+var cameraRotX;
+var cameraRotY;
+var cameraRotZ;
 
 function getRandomIntInclusive(min, max, increment) {
   min = Math.ceil(min);
@@ -56,6 +60,10 @@ function init()
   camera.position.setY(cameraPosY);
   camera.position.setZ(cameraPosZ);
   camera.position.setX(cameraPosX);
+
+  cameraRotX = camera.rotation.x;
+  cameraRotY = camera.rotation.y;
+  cameraRotZ = camera.rotation.z;
 
   controls = new THREE.OrbitControls(camera, renderer.domElement); 
 
@@ -311,12 +319,17 @@ function animate() {
   
   if(mousePosX && mousePosY)
   {
-    camera.position.x = cameraPosX + mousePosX;
-    camera.position.y = cameraPosY + mousePosY;
+    camera.position.x = cameraPosX + mousePosX * mouseMod;
+    camera.position.y = cameraPosY + mousePosY * mouseMod;
     camera.position.z = cameraPosZ;
+
+    //ToDo:adjust rotation slightly for a pivot effect
+    //this doesn't work as I thought it would, cameraRotY returns 0; probably need to look into euler angles
+    //camera.rotation.y = cameraRotY; // + mousePosX * 0.001;
   }
 
-  console.log(mousePosX);
+  //console.log(cameraRotY);
+  //console.log(camera.rotation);
 
   requestAnimationFrame( animate );
   //controls.update();
@@ -344,5 +357,8 @@ initSnow();
 
 generateBuildingRow(startPosX, startPosY, startPosZ, 10);
 //generateBuildingRow(startPosX, startPosY, startPosZ + maxBuildingWidth * storyHeight + 10, 10);
+
+
+
 
 animate();
