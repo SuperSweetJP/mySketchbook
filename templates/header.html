@@ -82,6 +82,8 @@
       } */
     </style>
 
+    <canvas id = "bg"></canvas>
+
     {% if request.path != url_for('threeDViz') %}
     <div class="demo-layout-transparent mdl-layout mdl-js-layout">
     {% else %}
@@ -124,13 +126,38 @@
           <a class="mdl-navigation__link" href="">Other</a>
         </nav> -->
         <p>Nothing here, yet.</p>
+        <p>ToDo: set up navigation for smaller screens</p>
       </div>
       <!-- Content -->
       <main class="mdl-layout__content">
-      <canvas id = "bg"></canvas>
 
-      {% block body %}
-      {% endblock %}
+
+        {% block body %}
+        {% endblock %}
+
+        <!-- handle clicks/mid-clicks on cards -->
+        <script>
+          Array.prototype.forEach.call(document.querySelectorAll('.seethrough-card'), function(el) {
+            var link = el.querySelector('a');
+            if(!link) {
+              console.log("a not found");
+              return;
+            }
+            var target = link.getAttribute('href');
+            if(!target) {
+              console.log("href not found");
+              return;
+            }
+            el.addEventListener('click', function() {
+              location.href = target;
+            });
+            el.addEventListener('auxclick', function() {
+              //location.href = target;
+              console.log("mid click");
+              window.open(target, '_blank').focus();
+            });
+          });
+        </script>
 
       </main>
     </div>

@@ -19,10 +19,25 @@ html, body, header {
 }
 
 .mdl-layout__content {
+  /* margin-top: -35vh; */
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
   padding-left: 42px;
   padding-top: 42px;
   padding-right: 42px;
 }
+
+.mdl-layout.is-small-screen .material-icons {
+  color: #595F72 !important;
+}
+
+.mdl-layout.is-small-screen .mdl-layout__content {
+  padding-left: 0px;
+  padding-top: 0px;
+  padding-right: 0px;
+}
+
 .mdl-layout-title
 {
   font-family: 'Ubuntu';
@@ -37,29 +52,17 @@ a.TitleLink
   color: white;
 }
 
+.mdl-card__post
+{
+  border-radius: 2px;
+  padding: 80px 56px;
+  margin-bottom: 80px;
+  background-color: white;
+}
+
 .mdl-navigation
 {
   font-family: 'Ubuntu';
-}
-
-.mdl-card__media {
-  box-sizing: border-box;
-  background-size: cover;
-  padding: 4px;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-grow: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
-  -webkit-flex-direction: row;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -webkit-align-items: flex-end;
-      -ms-flex-align: end;
-          align-items: flex-end;
-  cursor: pointer;
-  max-height: 54px;
 }
 
 .mdl-card__heading {
@@ -87,6 +90,7 @@ a.TitleLink
 }
 
 .mdl-card__title-text {
+  font-weight: 400;
   box-sizing: border-box;
   background-size: cover;
   padding: 8px;
@@ -104,13 +108,28 @@ a.TitleLink
           align-items: flex-end;
 }
 
+.mdl-card__title-text > a
+{
+  color: black;
+  font-weight: 400;
+}
+
 .mdl-card__date {
 
   /* display: flex; */
   margin: auto;
-  font-size: 12px;
+  font-size: 14px;
   color: #595F72;
   text-align: right;
+}
+
+.mdl-card__date-left {
+
+  /* display: flex; */
+  margin: auto;
+  font-size: 14px;
+  color: #595F72;
+  text-align: left;
 }
 
 .mdl-card__text-background
@@ -161,3 +180,23 @@ canvas {
   padding:0px;
 }
 
+.post-container
+{
+  max-width: 1600px;
+  width: calc(100% - 16px);
+  margin: 0 auto;
+}
+
+.post-content {
+  border-radius: 2px;
+  padding: 80px 56px;
+  margin-bottom: 80px;
+}
+
+.post-content h3 {
+  margin-top: 48px;
+}
+
+.mdl-layout.is-small-screen .post-content {
+  padding: 40px 28px;
+}
