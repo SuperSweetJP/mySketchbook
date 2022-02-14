@@ -21,6 +21,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <!-- ToDo: make this into a variable somehow -->
     <title>JP's dev sketchbook</title>
 
     <!-- Add to homescreen for Chrome on Android -->
@@ -84,16 +85,11 @@
 
     <canvas id = "bg"></canvas>
 
-    {% if request.path != url_for('threeDViz') %}
     <div class="demo-layout-transparent mdl-layout mdl-js-layout">
-    {% else %}
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    {% endif %}
       <header class="mdl-layout__header mdl-layout__header--transparent">
         <div class="mdl-layout__header-row">
           <!-- Title -->
-          <a href="" class="TitleLink">JP's dev sketchbook</a>
-          <!-- <span class="mdl-layout-title">JP's dev sketchbook</span> -->
+          <a href="{{ url_for('dynamicsNotes') }}" class="TitleLink">JP's dev sketchbook</a>
           <!-- Add spacer, to align navigation to the right -->
           <div class="mdl-layout-spacer"></div>
           <!-- Navigation -->
@@ -106,16 +102,13 @@
         </div>
         <!-- Tabs -->
         <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
-          {% if request.path == url_for('dynamicsNotes') %}
-          <a href="{{ url_for('dynamicsNotes') }}" class="mdl-layout__tab is-active">X++</a>
-          <a href="{{ url_for('threeDViz') }}" class="mdl-layout__tab">Other</a>
-          {% elif request.path == url_for('threeDViz') %}
-          <a href="{{ url_for('dynamicsNotes') }}" class="mdl-layout__tab">X++</a>
-          <a href="{{ url_for('threeDViz') }}" class="mdl-layout__tab is-active">Other</a>
-          {% else %}
-          <a href="{{ url_for('dynamicsNotes') }}" class="mdl-layout__tab">X++</a>
-          <a href="{{ url_for('threeDViz') }}" class="mdl-layout__tab">Other</a>
-          {% endif %}
+          {% for t in TAB_DICT %}
+            {% if request.path == url_for(TAB_DICT[t]) %}
+              <a href="{{ url_for(TAB_DICT[t]) }}" class="mdl-layout__tab is-active">{{t}}</a>
+            {% else %}
+              <a href="{{ url_for(TAB_DICT[t]) }}" class="mdl-layout__tab">{{t}}</a>
+            {% endif %}
+          {% endfor %}
         </div>
       </header>
       <div class="mdl-layout__drawer">
