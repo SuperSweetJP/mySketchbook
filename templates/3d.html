@@ -6,14 +6,26 @@
   <script src="{{ url_for('static', filename='js/scraperViz.js')}}"></script>
   
   {% for t in TOPIC_DICT["3D"] %}
-    <div class="{{t[1]}} mdl-card mdl-cell mdl-cell--{{t[6]}}-col mdl-shadow--2dp">
+    <div class="{{t[1]}} mdl-card mdl-cell mdl-cell--8-col mdl-cell--{{t[6]}}-col-desktop mdl-shadow--2dp">
       <div class="mdl-card__title">
-        <h3 class="mdl-card__title-text"> <a href="{{ url_for(t[4]) }}">{{t[0]}}</a></h3>
+        <h3 class="mdl-card__title-text"> 
+          {% if t[4] %}
+            <a href="{{ url_for(t[4]) }}">{{t[0]}}</a>
+          {% else %}
+            {{t[0]}}
+          {% endif %}
+        </h3>
         <div class="mdl-card__date">Date: {{t[3]}}</div>
       </div>
       <div class="mdl-card__actions mdl-card--border"></div>
       <div class="mdl-card__text-background">
         <div class="mdl-card__supporting-text">
+          {% if t[7] %}
+          <p>
+            <img src="{{ url_for('static', filename=t[7])}}"  alt="clamp quaternion"  width="500"/>
+          </p>
+          {% endif %}
+          <!-- <img src="{{ url_for('static', filename='img/gifs/ClampQuaternion.gif')}}" alt="clamp quaternion"  width="500" /> -->
           {{t[2]}}
         </div>
         <div class="mdl-card__supporting-chips">
@@ -27,7 +39,7 @@
     </div>
   {% endfor %}
 
-  <div class="quaternion-clamp mdl-card mdl-cell mdl-cell--6-col mdl-shadow--2dp">
+  <!-- <div class="quaternion-clamp mdl-card mdl-cell mdl-cell--8-col mdl-cell--4-col-desktop mdl-shadow--2dp">
     <div class="mdl-card__media mdl-color-text--grey-50">
       <h3><a href="entry.html">Clamp Quaternion</a></h3>
     </div>
@@ -71,6 +83,6 @@
         </span>
       </div>
     </div>
-  </div>
+  </div> -->
 
 {% endblock %} 

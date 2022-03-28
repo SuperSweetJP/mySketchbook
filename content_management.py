@@ -9,24 +9,26 @@ def Content():
     TOPIC_DICT = {
         "3D": 
             [
-                #0 CardTitle, 1 CardType, 2 SupportingText, 3 Date, 4 Link, 5 [Chips], 6 Width(col)
+                #0 CardTitle, 1 CardType, 2 SupportingText, 3 Date, 4 Link (optional), 5 [Chips], 6 Width(col), [7 image loc, descr, width] (optional)
                 [
-                    "Clamp quaternion", 
-                    "quaternion-clamp", 
+                    "Clamp quaternion [Unity3D]", 
+                    "seethrough-card", 
                     "Code snippet for limiting quaternion rotation on two axes", 
                     "13/02/2022", 
                     "clamp_quaternion", 
                     ["Quaternion", "Rotation", "Unity3D"],
-                    4
+                    6,
+                    r"img/gifs/ClampQuaternion.gif"
                 ],
                 [
-                    "ThreeJS example1", 
+                    "Randomized building generator [ThreeJS]", 
                     "seethrough-card", 
-                    "Played around with ThreeJS library for the first time", 
+                    "Played around with javascript ThreeJS library, to create the randomized urban landscape (ībļi).", 
                     "04/02/2022", 
-                    "text_entry2",
+                    "cityScape",
                     ["ThreeJS", "WebDev"],
-                    4
+                    6,
+                    r"img/cityScape.jpg"
                 ]
             ],
         "DATA": 
