@@ -13,22 +13,21 @@ def Content():
                 [
                     "Clamp quaternion [Unity3D]", 
                     "seethrough-card", 
-                    "Code snippet for limiting quaternion rotation on two axes", 
+                    "Code snippet for limiting quaternion rotation on two axes.", 
                     "13/02/2022", 
                     "clamp_quaternion", 
                     ["Quaternion", "Rotation", "Unity3D"],
                     6,
                     r"img/gifs/ClampQuaternion.gif"
-                ],
-                [
+                ]
+                ,[
                     "Randomized building generator [ThreeJS]", 
                     "seethrough-card", 
-                    "Played around with javascript ThreeJS library, to create the randomized urban landscape (ībļi).", 
+                    "Played around with javascript ThreeJS library, to create the randomized building blocks on the right side.", 
                     "04/02/2022", 
                     "cityScape",
                     ["ThreeJS", "WebDev"],
-                    6,
-                    r"img/cityScape.jpg"
+                    6
                 ]
             ],
         "DATA": 

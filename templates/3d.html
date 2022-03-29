@@ -3,7 +3,7 @@
 {% block body %}
   <script src="{{ url_for('static', filename='node_modules/three/build/three.js')}}"></script>
   <script src="{{ url_for('static', filename='node_modules/three/examples/js/controls/OrbitControls.js')}}"></script>
-  <script src="{{ url_for('static', filename='js/scraperViz.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/cityScape.js')}}"></script>
   
   {% for t in TOPIC_DICT["3D"] %}
     <div class="{{t[1]}} mdl-card mdl-cell mdl-cell--8-col mdl-cell--{{t[6]}}-col-desktop mdl-shadow--2dp">
