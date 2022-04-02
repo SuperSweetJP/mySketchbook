@@ -21,7 +21,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <!-- ToDo: make this into a variable somehow -->
+
     <title>JP's sketchbook</title>
 
     <!-- Add to homescreen for Chrome on Android -->
@@ -64,24 +64,9 @@
     </style>
   </head>
   <body>
-    <!-- Uses a transparent header that draws on top of the layout's background -->
-    <style>
-      .demo-layout-transparent {
-        background: url("{{ url_for('static', filename='')}}") center / cover;
-        /* background: url('') center / cover; */
-        /* backgrounrgb(0, 0, 0)000; */
-      }
-      .demo-layout-transparent .mdl-layout__header,
-      .demo-layout-transparent .mdl-layout__drawer-button {
-        /* This background is dark, so we set text to white. Use 87% black instead if
-          your background is light. */
-        color: white;
-      }
-    </style>
-
     <canvas id = "bg"></canvas>
 
-    <div class="demo-layout-transparent mdl-layout mdl-js-layout">
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
       <header class="mdl-layout__header mdl-layout__header--transparent">
         <div class="mdl-layout__header-row">
           <!-- Title -->
@@ -107,7 +92,7 @@
           {% endfor %}
         </div>
       </header>
-      <div class="mdl-layout__drawer">
+      <div class="mdl-layout__drawer mdl-layout--small-screen-only">
         <!-- <span class="mdl-layout-title">Notebooks</span>
         <nav class="mdl-navigation">
           <a class="mdl-navigation__link" href="">D365</a>

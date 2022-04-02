@@ -3,7 +3,15 @@
 {% block body %}
   <script src="{{ url_for('static', filename='node_modules/three/build/three.js')}}"></script>
   <script src="{{ url_for('static', filename='node_modules/three/examples/js/controls/OrbitControls.js')}}"></script>
-  <script src="{{ url_for('static', filename='js/cityScape.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/blankBg.js')}}"></script>
+  <!-- <script>
+    if(screen.width >= 840) {
+      document.head.appendChild(document.createElement('script')).src ="{{ url_for('static', filename='js/cityScape.js')}}";
+    }
+    else{
+      document.head.appendChild(document.createElement('script')).src ="{{ url_for('static', filename='js/blankBg.js')}}";
+    }
+  </script> -->
   
   {% for t in TOPIC_DICT["3D"] %}
     <div class="{{t[1]}} mdl-card mdl-cell mdl-cell--8-col mdl-cell--{{t[6]}}-col-desktop mdl-shadow--2dp">
@@ -22,7 +30,9 @@
         <div class="mdl-card__supporting-text">
           {% if t[7] %}
           <p>
-            <img src="{{ url_for('static', filename=t[7])}}"  alt="clamp quaternion"  width="500"/>
+          <div class="mdl-card__media">
+              <img src="{{ url_for('static', filename=t[7])}}"  alt="clamp quaternion"  width="500"/>
+          </div>
           </p>
           {% endif %}
           <!-- <img src="{{ url_for('static', filename='img/gifs/ClampQuaternion.gif')}}" alt="clamp quaternion"  width="500" /> -->

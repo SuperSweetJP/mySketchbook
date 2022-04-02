@@ -1,21 +1,16 @@
-/**
- * Copyright 2015 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 html, body, header {
   font-family: 'Roboto', 'Helvetica', 'Ubuntu', sans-serif;
+}
+
+.mdl-layout .mdl-layout__header .mdl-layout__drawer-button {
+  /* This background is dark, so we set text to white. Use 87% black instead if
+    your background is light. */
+  color: white;
+}
+
+.mdl-layout__tab-bar-right-button, .mdl-layout__tab-bar-left-button
+{
+  display:none;
 }
 
 .mdl-layout__content {
@@ -29,7 +24,7 @@ html, body, header {
 }
 
 .mdl-layout.is-small-screen .material-icons {
-  color: #595F72 !important;
+  color:rgba(66,66,66) !important;
 }
 
 .mdl-layout.is-small-screen .mdl-layout__content {
@@ -90,7 +85,7 @@ a.TitleLink
 }
 
 .mdl-card__title-text {
-  font-weight: 400;
+  /* font-family: 'Roboto'; */
   box-sizing: border-box;
   background-size: cover;
   padding: 8px;
@@ -108,10 +103,20 @@ a.TitleLink
           align-items: flex-end;
 }
 
-.mdl-card__title-text > a
+h3 > a
 {
-  color: black;
+  color:rgba(66,66,66);
   font-weight: 400;
+  font-family: 'Roboto';
+  text-decoration: none;
+}
+
+.mdl-card__title
+{
+  color:rgba(66,66,66);
+  /* color: black; */
+  font-weight: 400;
+  font-family: 'Roboto';
 }
 
 .mdl-card__date {
@@ -119,7 +124,7 @@ a.TitleLink
   /* display: flex; */
   margin: auto;
   font-size: 14px;
-  color: #595F72;
+  color:rgba(66,66,66, .85);
   text-align: right;
 }
 
@@ -132,11 +137,6 @@ a.TitleLink
   text-align: left;
 }
 
-.mdl-card__text-background
-{
-  background-color: rgba(255, 255, 255, .3);
-}
-
 .mdl-card__supporting-chips
 {
   text-align: right;
@@ -146,28 +146,28 @@ a.TitleLink
 .mdl-card__supporting-text
 {
   padding-left: 24px;
+  color:rgba(116, 114, 113)
+}
+
+.mdl-card__supporting-text > a
+{
+  color: blue;
 }
 
 .mdl-chip
 {
   background-color:#dededeb6;
-}
-
-a {
-  text-decoration: none;
-  font-weight: 500;
-  color: white;
+  cursor: default;
+  /* background-color:rgb(255,171,64, 0.9); */
 }
 
 .seethrough-card {
-  background-color: rgba(255, 255, 255, .95);
-  cursor: pointer;
+  background-color: rgba(255, 255, 255, .98);
 }
 
-/* .seethrough-card > .mdl-card__title
-{
-  background-color: rgba(255, 255, 255, 0.9);;
-} */
+.seethrough-card .mdl-card__media {
+  background:none;
+}
 
 canvas {
   position: fixed;
@@ -183,6 +183,7 @@ canvas {
 .post-container
 {
   max-width: 1600px;
+  /* min-width: 1200px; */
   width: calc(100% - 16px);
   margin: 0 auto;
 }
@@ -197,6 +198,61 @@ canvas {
   margin-top: 48px;
 }
 
+.post-content .mdl-card__media {
+  background:none;
+  /* prevent img from overflowing */
+  overflow:hidden;
+}
+
 .mdl-layout.is-small-screen .post-content {
   padding: 40px 28px;
+}
+
+/* Different card examples */
+
+/* .seethrough-card > .mdl-card__title
+{
+  background-color: rgba(255, 255, 255, 0.9);;
+} */
+
+/* .seethrough-card .mdl-card__media {
+  background-image: url('../img/gifs/ClampQuaternion.gif');
+  width: auto;
+  height: 300px;
+  padding-left:16px;
+  cursor: pointer;
+} */
+
+/* .quaternion-clamp .mdl-card__media {
+  background-image: url('../img/cube_viz.jpg');
+  width: auto;
+  height: 300px;
+  padding-left:16px;
+  cursor: pointer;
+} */
+
+/* .seethrough-card .mdl-card__media > h3 > a {
+  color: white !important;
+  font-weight: 400;
+  font-family: 'Roboto';
+  text-decoration: none;
+} */
+
+/**** Mobile layout ****/
+@media (max-width: 900px) {
+  .mdl-layout__tab {
+    display: none;
+  }
+  
+  .mdl-layout__header-row
+  {
+    display: none;
+  }
+
+  /* .mdl-layout__drawer
+  {
+    display: -webkit-flex;
+    color: white;
+  } */
+
 }
