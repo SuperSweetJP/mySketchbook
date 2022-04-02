@@ -73,7 +73,7 @@
           <a href="{{ url_for('dynamicsNotes') }}" class="TitleLink">JP's sketchbook</a>
           <!-- Add spacer, to align navigation to the right -->
           <div class="mdl-layout-spacer"></div>
-          <!-- Navigation -->
+          <!-- header navigation -->
           <nav class="mdl-navigation">
             <!-- <a class="mdl-navigation__link" href="{{ url_for('about') }}">About</a>
             <a class="mdl-navigation__link" href="{{ url_for('contact') }}">Contact</a> -->
@@ -93,14 +93,15 @@
         </div>
       </header>
       <div class="mdl-layout__drawer mdl-layout--small-screen-only">
-        <!-- <span class="mdl-layout-title">Notebooks</span>
+        <span class="mdl-layout-title">[notebook img]</span>
         <nav class="mdl-navigation">
-          <a class="mdl-navigation__link" href="">D365</a>
-          <a class="mdl-navigation__link" href="">Unity3D</a>
-          <a class="mdl-navigation__link" href="">Other</a>
-        </nav> -->
-        <p>Nothing here, yet.</p>
-        <p>ToDo: set up navigation for smaller screens</p>
+          {% for t in TAB_DICT %}
+              <a class="mdl-navigation__link" href="{{ url_for(TAB_DICT[t]) }}">{{t}}</a>
+          {% endfor %}
+          <!-- <div class="android-drawer-separator"></div>
+          <a class="mdl-navigation__link" href="https://github.com/supersweetjp">GitHub</a>
+          <a class="mdl-navigation__link" href="https://www.linkedin.com/in/janis-plavins">LinkedIn</a> -->
+        </nav>
       </div>
       <!-- Content -->
       <main class="mdl-layout__content">

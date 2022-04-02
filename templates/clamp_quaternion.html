@@ -1,0 +1,63 @@
+{% extends "header.html" %}
+
+{% block body %}
+
+<script src="{{ url_for('static', filename='node_modules/three/build/three.js')}}"></script>
+<script src="{{ url_for('static', filename='js/blankBg.js')}}"></script>
+
+<div class="post-container mdl-grid">
+
+  <!-- <div class="demo-back">
+    <a class="mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-button--icon" href="index.html" title="go back" role="button">
+      <i class="material-icons" role="presentation">arrow_back</i>
+    </a>
+  </div> -->
+
+    <!-- 2col side that is hidden on small screens -->
+    <!-- <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div> -->
+    <div class="post-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--12-col">
+      <!-- <div class="demo-crumbs mdl-color-text--grey-500">
+        Google &gt; Material Design Lite &gt; How to install MDL
+      </div> -->
+      <h3>Limit quaternion rotation</h3>
+      <!-- <div class="mdl-card__date">Date: 23/11/2022</div> -->
+      <div class="mdl-card__media">
+        <img src="{{ url_for('static', filename='img/gifs/ClampQuaternion.gif')}}" alt="clamp quaternion"  width="500" />
+      </div>
+        <p>
+          Here's a way to limit rotation, past a certain degree from starting position, on two axis, using quaternions. 
+        </p>
+        <style>
+          /* https://github.com/lonekorean/gist-syntax-themes */
+          @import url('https://cdn.rawgit.com/lonekorean/gist-syntax-themes/d49b91b3/stylesheets/idle-fingers.css');
+          
+          @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+          body {
+            font: 16px 'Open Sans', sans-serif;
+          }
+          body .gist .gist-file {
+            border-color: #555 #555 #444
+          }
+          body .gist .gist-data {
+            border-color: #555
+          }
+          body .gist .gist-meta {
+            color: #ffffff;
+            background: #373737; 
+          }
+          body .gist .gist-meta a {
+            color: #ffffff
+          }
+          </style>
+  
+        <script src="https://gist.github.com/SuperSweetJP/cc6401683ada9405c1be7c28166a75bf.js"></script>
+        <a href="{{ url_for('threeD') }}" class="demo-nav__button">
+          <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+            <i class="material-icons">arrow_back_ios_new</i>
+          </button>
+        </a>
+    </div>
+  </div>
+
+
+{% endblock %}

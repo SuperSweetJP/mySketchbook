@@ -1,16 +1,12 @@
+/**** Header section ****/
 html, body, header {
   font-family: 'Roboto', 'Helvetica', 'Ubuntu', sans-serif;
 }
 
-.mdl-layout .mdl-layout__header .mdl-layout__drawer-button {
-  /* This background is dark, so we set text to white. Use 87% black instead if
-    your background is light. */
-  color: white;
-}
 
-.mdl-layout__tab-bar-right-button, .mdl-layout__tab-bar-left-button
+.mdl-layout__tab-bar
 {
-  display:none;
+  overflow: visible !important;
 }
 
 .mdl-layout__content {
@@ -55,9 +51,17 @@ a.TitleLink
   background-color: white;
 }
 
+/**** Navigation drawer section ****/
+
 .mdl-navigation
 {
   font-family: 'Ubuntu';
+}
+
+.android-drawer-separator {
+  height: 1px;
+  background-color: #dcdcdc;
+  margin: 8px 0;
 }
 
 .mdl-card__heading {
@@ -239,20 +243,33 @@ canvas {
 } */
 
 /**** Mobile layout ****/
-@media (max-width: 900px) {
-  .mdl-layout__tab {
+@media (max-width: 1024px) {
+  .mdl-layout__tab-bar
+  {
     display: none;
   }
-  
+
+  .mdl-layout__tab-bar-container{
+    height: 10px;
+  }
+
   .mdl-layout__header-row
   {
+    background:rgb(244,67,54);
+  }
+
+  .mdl-layout.is-small-screen .mdl-layout__drawer-button {
+    /* doesn't work on small screens */
+    color: white;
+  }
+
+  .mdl-layout__header-row .mdl-navigation
+  {
     display: none;
   }
 
-  /* .mdl-layout__drawer
+  .mdl-layout__tab-bar-right-button, .mdl-layout__tab-bar-left-button
   {
-    display: -webkit-flex;
-    color: white;
-  } */
-
+    display:none;
+  }
 }
