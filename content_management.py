@@ -3,7 +3,7 @@ def Content():
 
     TAB_DICT = {
         "3D" : "threeD",
-        "DATA" : "dynamicsNotes"
+        "DATA" : "data"
     }
 
     TOPIC_DICT = {
@@ -18,15 +18,33 @@ def Content():
                     "clamp_quaternion", 
                     ["Quaternion", "Rotation", "Unity3D"],
                     6,
-                    r"img/gifs/ClampQuaternion.gif"
+                    # r"img/gifs/ClampQuaternion.gif"
                 ]
                 ,[
                     "Randomized building generator [ThreeJS]", 
                     "seethrough-card", 
-                    "Played around with javascript ThreeJS library, to create the randomized building blocks on the right side.", 
+                    "Played around with javascript ThreeJS library, to create randomized building blocks.", 
                     "04/02/2022", 
                     "cityScape",
                     ["ThreeJS", "WebDev"],
+                    6
+                ]
+                ,[
+                    "Swarm model [Blender]", 
+                    "seethrough-card", 
+                    "A creepy crawly. My first complete model, along with some textures", 
+                    "03/10/2021", 
+                    "swarm_model",
+                    ["Blender"],
+                    6
+                ]
+                ,[
+                    "Swarm model animated [Blender]", 
+                    "seethrough-card", 
+                    "For performance testing on mobile", 
+                    "03/10/2021", 
+                    "swarm_model_anim",
+                    ["Blender"],
                     6
                 ]
             ],

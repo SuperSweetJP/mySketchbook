@@ -88,6 +88,23 @@ a.TitleLink
           align-items: flex-end;
 }
 
+/**** Grid section ****/
+
+.demo-blog__posts {
+  max-width: 900px;
+  padding: 0;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  margin: 0 auto;
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
+}
+
+/**** Card section ****/
+
 .mdl-card__title-text {
   /* font-family: 'Roboto'; */
   box-sizing: border-box;

@@ -1,0 +1,27 @@
+{% extends "header.html" %}
+
+{% block body %}
+  <script src="{{ url_for('static', filename='node_modules/three/build/three.js')}}"></script>
+  <script src="{{ url_for('static', filename='node_modules/three/examples/js/controls/OrbitControls.js')}}"></script>
+  <script src="{{ url_for('static', filename='node_modules/three/examples/js/loaders/GLTFLoader.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/swarmModelAnim.js')}}"></script>
+
+  <div class="post-container mdl-grid">
+
+    <div class="seethrough-card mdl-card mdl-cell mdl-cell--3-col mdl-shadow--2dp">
+      <div class="mdl-card__title">
+        <h3 class="mdl-card__title-text"> Swarm model </h3>
+        <!-- <div class="mdl-card__date">Date: 01/01/2021</div> -->
+      </div>
+      <div class="mdl-card__actions mdl-card--border"></div>
+      <div class="mdl-card__text-background">
+        <div class="mdl-card__supporting-text">
+          A creepy crawly. <br>
+          Reminder for self, remove unused animations to save file size.
+        </div>
+      </div>
+    </div>
+
+  </div>
+  
+{% endblock %}
