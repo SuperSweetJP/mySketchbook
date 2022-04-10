@@ -3,28 +3,25 @@
 {% block body %}
   <script src="{{ url_for('static', filename='node_modules/three/build/three.js')}}"></script>
   <script src="{{ url_for('static', filename='node_modules/three/examples/js/controls/OrbitControls.js')}}"></script>
-  <script src="{{ url_for('static', filename='node_modules/three/examples/js/loaders/GLTFLoader.js')}}"></script>
-  <script src="{{ url_for('static', filename='js/swarmModel.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/cityScape.js')}}"></script>
 
-  <!-- if width less than 750 then hide card -->
-  
   <div class="post-container mdl-grid">
 
     <div class="low-prio-card mdl-card mdl-cell mdl-cell--3-col mdl-shadow--2dp">
       <div class="mdl-card__title">
-        <h3 class="mdl-card__title-text"> Swarm model </h3>
+        <h3 class="mdl-card__title-text"> Randomized building generator </h3>
         <!-- <div class="mdl-card__date">Date: 01/01/2021</div> -->
       </div>
       <div class="mdl-card__actions mdl-card--border"></div>
       <div class="mdl-card__text-background">
         <div class="mdl-card__supporting-text">
-          A creepy crawly. <br>
-          My first complete model, along with some textures <br>
-          Mouse to rotate.
+          <!-- <script src="https://gist.github.com/SuperSweetJP/504079b5399ea72b889a0d294eca1386.js"></script> -->
+          <a class="mdl-navigation__link" href="https://github.com/SuperSweetJP/mySketchbook/blob/master/static/js/cityScape.js">Link</a>
+          to source code. <br>
+          Refresh page to regenerate.
         </div>
       </div>
     </div>
 
   </div>
-  
 {% endblock %}

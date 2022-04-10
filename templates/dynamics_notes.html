@@ -1,0 +1,135 @@
+{% extends "header.html" %}
+
+{% block body %}
+
+  <script src="{{ url_for('static', filename='node_modules/three/build/three.js')}}"></script>
+  <script src="{{ url_for('static', filename='node_modules/three/examples/js/controls/OrbitControls.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/cityScape.js')}}"></script>
+
+  {% for t in TOPIC_DICT["X++"] %}
+    <div class="{{t[1]}} mdl-card mdl-cell mdl-cell--{{t[6]}}-col mdl-shadow--2dp">
+      <div class="mdl-card__title">
+        <h3 class="mdl-card__title-text"> <a href="{{ url_for(t[4]) }}">{{t[0]}}</a></h3>
+        <div class="mdl-card__date">Date: {{t[3]}}</div>
+      </div>
+      <div class="mdl-card__actions mdl-card--border"></div>
+      <div class="mdl-card__text-background">
+        <div class="mdl-card__supporting-text">
+          {{t[2]}}
+        </div>
+        <div class="mdl-card__supporting-chips">
+          {% for c in t[5] %}
+            <span class="mdl-chip">
+              <span class="mdl-chip__text">{{c}}</span>
+            </span>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
+
+ <div class="seethrough-card mdl-card mdl-cell mdl-cell--6-col mdl-shadow--2dp">
+    <div class="mdl-card__title">
+      <h3 class="mdl-card__title-text">Under construction</h3>
+      <div class="mdl-card__date">Date: 27/03/2022 </div>
+    </div>
+    <div class="mdl-card__actions mdl-card--border"></div>
+    <div class="mdl-card__text-background">
+      <div class="mdl-card__supporting-text">
+         Please come back later.
+      </div>
+      <div class="mdl-card__supporting-chips">
+      </div>
+    </div>
+  </div>
+
+
+  <!--  <div class="seethrough-card mdl-card mdl-cell mdl-cell--6-col mdl-shadow--2dp">
+    <div class="mdl-card__title">
+      <h3 class="mdl-card__title-text"> <a href="{{ url_for('text_entry2') }}">BOM journal creation <br> huhuhuhue</a></h3>
+      <div class="mdl-card__date">Date: 01/01/2021</div>
+    </div>
+    <div class="mdl-card__actions mdl-card--border"></div>
+    <div class="mdl-card__text-background">
+      <div class="mdl-card__supporting-text">
+        Project description here is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown 
+      </div>
+      <div class="mdl-card__supporting-chips">
+        <span class="mdl-chip">
+          <span class="mdl-chip__text">Accounts payable</span>
+        </span>
+        <span class="mdl-chip">
+          <span class="mdl-chip__text">Receipt</span>
+        </span>
+        <span class="mdl-chip">
+          <span class="mdl-chip__text">Vendor</span>
+        </span>
+      </div>
+    </div>
+  </div> -->
+
+<!-- Use this to allow multiple cards in line -->
+  <!-- <div class="mdl-grid demo-content">
+    <div class="threed-viz-card mdl-card mdl-cell mdl-shadow--2dp">
+      <div class="mdl-card__media mdl-color-text--grey-50">
+        <h3><a href="{{ url_for('threeD') }}">3d visualization</a></h3>
+      </div>
+      <div>Date: 01/01/2021</div>
+        <div class="mdl-card__supporting-text">
+          Check out this 3d visualization!! <br>
+
+        <div class="mdl-card__actions mdl-card--border">
+          <h5>[three.JS, WebDev, Viz]</h5>
+        </div>
+        </div>
+      </div>
+
+    <div class="mdl-card coffee-pic mdl-cell mdl-cell--8-col">
+      <div class="mdl-card__media mdl-color-text--grey-50">
+        <h3><a href="{{ url_for('text_entry') }}">Coffee Pic</a></h3>
+      </div>
+      <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sagittis pellentesque lacus eleifend lacinia...</div>
+      <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
+        <div class="minilogo"></div>
+        <div>
+          <strong>The Newist</strong>
+          <span>2 days ago</span>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+<!-- <script>
+  Array.prototype.forEach.call(document.querySelectorAll('.mdl-card__media'), function(el) {
+    var link = el.querySelector('a');
+    if(!link) {
+      return;
+    }
+    var target = link.getAttribute('href');
+    if(!target) {
+      return;
+    }
+    el.addEventListener('click', function() {
+      location.href = target;
+    });
+  });
+</script>
+
+<script>
+  Array.prototype.forEach.call(document.querySelectorAll('.mdl-card__title'), function(el) {
+    var link = el.querySelector('a');
+    if(!link) {
+      return;
+    }
+    var target = link.getAttribute('href');
+    if(!target) {
+      return;
+    }
+    el.addEventListener('click', function() {
+      location.href = target;
+    });
+  });
+</script> -->
+
+{% endblock %}

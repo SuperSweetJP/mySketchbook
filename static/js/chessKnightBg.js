@@ -5,9 +5,11 @@ var horizontalOffset = 0;
 
 var mousePosX;
 var mousePosY;
-var cameraPosX = 59.7;
-var cameraPosY = 20.6;
-var cameraPosZ = 36.5;
+var cameraPosX = -8;
+var cameraPosY = 4;
+var cameraPosZ = 10;
+
+var cameraMovMod = .18;
 
 function init()
 {
@@ -23,25 +25,62 @@ function init()
 
   renderer.setPixelRatio( window.devicePixelRatio );
   renderer.setSize( window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
   camera.position.setY(cameraPosY);
   camera.position.setZ(cameraPosZ);
   camera.position.setX(cameraPosX);
 
 
-  raycaster = new THREE.Raycaster();
   mouse = new THREE.Vector2();
 
   const ambientLight = new THREE.AmbientLight(0xffffff);
   scene.add(ambientLight)
 
-  const plane = new THREE.Mesh(
-    new THREE.PlaneGeometry(600, 200),
-    new THREE.MeshBasicMaterial({color: 0xD52F15})
-  );
-  plane.lookAt(0, 1, 0)
-  scene.add(plane)
+  const directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+  directionalLight.position.set( 60, 20, 60 );
+  directionalLight.castShadow = true;
+  scene.add( directionalLight );
 
+  //Set up shadow properties for the light
+  directionalLight.shadow.mapSize.width = 512; // default
+  directionalLight.shadow.mapSize.height = 512; // default
+  directionalLight.shadow.camera.near = 0.5; // default
+  directionalLight.shadow.camera.far = 500; // default
+
+  //Knight model
+  const loader = new THREE.GLTFLoader();
+  loader.load( '../static/models/chessKnight512_2.glb', function ( gltf ) {
+    // var newMaterial = new THREE.MeshStandardMaterial({color: 0xff0000});
+  
+    gltf.scene.traverse( function( node ) {
+      if ( node.isMesh ) 
+      { 
+        node.castShadow = true;
+        node.receiveShadow = false; 
+        // node.material = newMaterial; 
+      }
+    } );
+  
+    scene.add( gltf.scene );
+  }, undefined, function ( error ) {
+    console.error( error );
+  } );
+  
+  //Plane
+  var plane = new THREE.Mesh(
+    new THREE.PlaneGeometry(600, 200),
+    new THREE.MeshLambertMaterial({
+        color: 0xD52F15,
+        // side: THREE.DoubleSide
+      })
+  );
   plane.position.setZ(horizontalOffset)
+  plane.lookAt(0, 1, 0)
+  plane.receiveShadow = true;
+  plane.castShadow = false;
+  scene.add(plane)
 
   window.addEventListener( 'mousemove', onMouseMove, false );
   window.addEventListener( 'resize', onWindowResize );
@@ -63,8 +102,8 @@ function animate() {
  
   if(mousePosX && mousePosY)
   {
-    camera.position.x = cameraPosX + mousePosX;
-    camera.position.y = cameraPosY + mousePosY;
+    camera.position.x = cameraPosX + mousePosX * cameraMovMod;
+    camera.position.y = cameraPosY + mousePosY * cameraMovMod;
     camera.position.z = cameraPosZ;
   }
 

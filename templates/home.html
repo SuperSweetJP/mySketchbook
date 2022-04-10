@@ -1,0 +1,36 @@
+{% extends "header.html" %}
+
+{% block body %}
+
+<!-- Use this to allow multiple cards in line -->
+<div class="mdl-grid demo-content">
+    <div class="threed-viz-card mdl-card mdl-cell mdl-shadow--2dp">
+      <div class="mdl-card__media mdl-color-text--grey-50">
+        <h3><a href="{{ url_for('threeDViz') }}">3d visualization</a></h3>
+      </div>
+      <div>Date: 01/01/2021</div>
+      <div class="mdl-card__supporting-text">
+        Check out this 3d visualization!! <br>
+
+        <div class="mdl-card__actions mdl-card--border">
+          <h5>[three.JS, WebDev, Viz]</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="mdl-card coffee-pic mdl-cell mdl-cell--8-col">
+      <div class="mdl-card__media mdl-color-text--grey-50">
+        <h3><a href="{{ url_for('threeDViz') }}">Coffee Pic</a></h3>
+      </div>
+      <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sagittis pellentesque lacus eleifend lacinia...</div>
+      <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
+        <div class="minilogo"></div>
+        <div>
+          <strong>The Newist</strong>
+          <span>2 days ago</span>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "header.html" %}
+
+{% block body %}
+
+<script src="{{ url_for('static', filename='node_modules/three/build/three.js')}}"></script>
+<script src="{{ url_for('static', filename='js/scraperViz.js')}}"></script>
+
+<div class="demo-container mdl-grid">
+  <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+    <div class="mdl-card__title">
+      <h3>On the road again</h3>
+    </div>
+
+    <div class="mdl-card__actions mdl-card--border"></div>
+    <div class="mdl-card__supporting-text">
+      <div class="minilogo"></div>
+        <div class="mdl-card__date-left"> <strong>Date: </strong> 01/01/2021</div>
+      <div class="section-spacer"></div>
+    
+    </div>
+    <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
+      <p>
+        Excepteur reprehenderit sint exercitation ipsum consequat qui sit id velit elit. Velit anim eiusmod labore sit amet. Voluptate voluptate irure occaecat deserunt incididunt esse in. Sunt velit aliquip sunt elit ex nulla reprehenderit qui ut eiusmod ipsum do. Duis veniam reprehenderit laborum occaecat id proident nulla veniam. Duis enim deserunt voluptate aute veniam sint pariatur exercitation. Irure mollit est sit labore est deserunt pariatur duis aute laboris cupidatat. Consectetur consequat esse est sit veniam adipisicing ipsum enim irure.
+      </p>
+      <p>
+        Qui ullamco consectetur aute fugiat officia ullamco proident Lorem ad irure. Sint eu ut consectetur ut esse veniam laboris adipisicing aliquip minim anim labore commodo. Incididunt eu enim enim ipsum Lorem commodo tempor duis eu ullamco tempor elit occaecat sit. Culpa eu sit voluptate ullamco ad irure. Anim commodo aliquip cillum ea nostrud commodo id culpa eu irure ut proident. Incididunt cillum excepteur incididunt mollit exercitation fugiat in. Magna irure laborum amet non ullamco aliqua eu. Aliquip adipisicing dolore irure culpa aute enim. Ullamco quis eiusmod ipsum laboris quis qui.
+      </p>
+      <p>
+        Cillum ullamco eu cupidatat excepteur Lorem minim sint quis officia irure irure sint fugiat nostrud. Pariatur Lorem irure excepteur Lorem non irure ea fugiat adipisicing esse nisi ullamco proident sint. Consectetur qui quis cillum occaecat ullamco veniam et Lorem cupidatat pariatur. Labore officia ex aliqua et occaecat velit dolor deserunt minim velit mollit irure. Cillum cupidatat enim officia non velit officia labore. Ut esse nisi voluptate et deserunt enim laborum qui magna sint sunt cillum. Id exercitation labore sint ea labore adipisicing deserunt enim commodo consectetur reprehenderit enim. Est anim nostrud quis non fugiat duis cillum. Aliquip enim officia ad commodo id.
+      </p>
+
+      <style>
+        /* https://github.com/lonekorean/gist-syntax-themes */
+        @import url('https://cdn.rawgit.com/lonekorean/gist-syntax-themes/d49b91b3/stylesheets/idle-fingers.css');
+        
+        @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+        body {
+          font: 16px 'Open Sans', sans-serif;
+        }
+        body .gist .gist-file {
+          border-color: #555 #555 #444
+        }
+        body .gist .gist-data {
+          border-color: #555
+        }
+        body .gist .gist-meta {
+          color: #ffffff;
+          background: #373737; 
+        }
+        body .gist .gist-meta a {
+          color: #ffffff
+        }
+        </style>
+
+      <script src="https://gist.github.com/SuperSweetJP/19633ce6ad108381d198b8ba63fd96d0.js"></script>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

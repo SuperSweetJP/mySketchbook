@@ -266,6 +266,11 @@ canvas {
     display: none;
   }
 
+  .low-prio-card
+  {
+    display: none;
+  }
+
   .mdl-layout__tab-bar-container{
     height: 10px;
   }

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, request
-from .content_management import Content
+from content_management import Content
 
 TOPIC_DICT, TAB_DICT = Content()
 
@@ -49,6 +49,10 @@ def clamp_quaternion():
 @app.route("/swarm_model/")
 def swarm_model():
   return render_template("swarm_model.html", TOPIC_DICT = TOPIC_DICT, TAB_DICT = TAB_DICT)
+
+@app.route("/chess_knight/")
+def chess_knight():
+  return render_template("chess_knight.html", TOPIC_DICT = TOPIC_DICT, TAB_DICT = TAB_DICT)
 
 @app.route("/swarm_model_anim/")
 def swarm_model_anim():

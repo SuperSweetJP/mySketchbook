@@ -11,7 +11,17 @@ def Content():
             [
                 #0 CardTitle, 1 CardType, 2 SupportingText, 3 Date, 4 Link (optional), 5 [Chips], 6 Width(col), [7 image loc, descr, width] (optional)
                 [
-                    "Clamp quaternion [Unity3D]", 
+                    "Chess Knight model", 
+                    "seethrough-card", 
+                    "A knight chess piece model. Procedurally generated textures that were baked into an image.", 
+                    "10/04/2022", 
+                    "chess_knight", 
+                    ["Blender", "ThreeJs"],
+                    6,
+                    # r"img/gifs/ClampQuaternion.gif"
+                ]
+                ,[
+                    "Clamp quaternion", 
                     "seethrough-card", 
                     "Code snippet for limiting quaternion rotation on two axes.", 
                     "13/02/2022", 
@@ -21,30 +31,30 @@ def Content():
                     # r"img/gifs/ClampQuaternion.gif"
                 ]
                 ,[
-                    "Randomized building generator [ThreeJS]", 
+                    "Randomized building generator", 
                     "seethrough-card", 
-                    "Played around with javascript ThreeJS library, to create randomized building blocks.", 
+                    "Played around with javascript ThreeJS library, to create randomized building blocks. Warning, quite resource heavy.", 
                     "04/02/2022", 
                     "cityScape",
-                    ["ThreeJS", "WebDev"],
+                    ["ThreeJS"],
                     6
                 ]
                 ,[
-                    "Swarm model [Blender]", 
-                    "seethrough-card", 
-                    "A creepy crawly. My first complete model, along with some textures", 
-                    "03/10/2021", 
-                    "swarm_model",
-                    ["Blender"],
-                    6
-                ]
-                ,[
-                    "Swarm model animated [Blender]", 
+                    "Swarm model animated", 
                     "seethrough-card", 
                     "For performance testing on mobile", 
                     "03/10/2021", 
                     "swarm_model_anim",
-                    ["Blender"],
+                    ["Blender", "ThreeJS"],
+                    6
+                ]
+                ,[
+                    "Swarm model", 
+                    "seethrough-card", 
+                    "A creepy crawly. My first complete model, along with some textures", 
+                    "03/10/2021", 
+                    "swarm_model",
+                    ["Blender", "ThreeJS"],
                     6
                 ]
             ],

@@ -70,7 +70,7 @@
       <header class="mdl-layout__header mdl-layout__header--transparent">
         <div class="mdl-layout__header-row">
           <!-- Title -->
-          <a href="{{ url_for('dynamicsNotes') }}" class="TitleLink">JP's sketchbook</a>
+          <a href="{{ url_for('threeD') }}" class="TitleLink">JP's sketchbook</a>
           <!-- Add spacer, to align navigation to the right -->
           <div class="mdl-layout-spacer"></div>
           <!-- header navigation -->
@@ -87,6 +87,12 @@
             {% if request.path == url_for(TAB_DICT[t]) %}
               <a href="{{ url_for(TAB_DICT[t]) }}" class="mdl-layout__tab is-active">{{t}}</a>
             {% else %}
+              <!-- {% for z in TOPIC_DICT[t] %}
+                {% if request.path == url_for(z[4]) %}
+                  <a href="{{ url_for(TAB_DICT[t]) }}" class="mdl-layout__tab is-active">{{t}}</a>
+                {% endif %}
+                <a href="{{ url_for(TAB_DICT[t]) }}" class="mdl-layout__tab">{{t}}</a>
+              {% endfor %} -->
               <a href="{{ url_for(TAB_DICT[t]) }}" class="mdl-layout__tab">{{t}}</a>
             {% endif %}
           {% endfor %}
@@ -104,37 +110,8 @@
         </nav>
       </div>
       <!-- Content -->
-      <main class="mdl-layout__content">
-
-
-        {% block body %}
-        {% endblock %}
-
-        <!-- handle clicks/mid-clicks on cards -->
-        <script>
-          Array.prototype.forEach.call(document.querySelectorAll('.mdl-card__media'), function(el) {
-            var link = el.querySelector('a');
-            if(!link) {
-              console.log("a not found");
-              return;
-            }
-            var target = link.getAttribute('href');
-            if(!target) {
-              console.log("href not found");
-              return;
-            }
-            el.addEventListener('click', function() {
-              location.href = target;
-            });
-            el.addEventListener('auxclick', function() {
-              //location.href = target;
-              console.log("mid click");
-              window.open(target, '_blank').focus();
-            });
-          });
-        </script>
-
-      </main>
+      {% block body %}
+      {% endblock %}
     </div>
     <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
   </body>
