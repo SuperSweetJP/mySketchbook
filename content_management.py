@@ -80,5 +80,47 @@ def Content():
                 # ]
             ]
     }
+
+    CAR_MAKE_DICT = {
+        "Alfa-Romeo" : "https://www.ss.lv/lv/transport/cars/alfa-romeo/sell/",
+        "Audi" : "https://www.ss.lv/lv/transport/cars/audi/sell/",
+        "BMW" : "https://www.ss.lv/lv/transport/cars/bmw/sell/",
+        "Cadilliac" : "https://www.ss.lv/lv/transport/cars/cadillac/sell/",
+        "Chevrolet" : "https://www.ss.lv/lv/transport/cars/chevrolet/sell/",
+        "Chrysler" : "https://www.ss.lv/lv/transport/cars/chrysler/sell/",
+        "Citroen" : "https://www.ss.lv/lv/transport/cars/citroen/sell/",
+        "Dacia" : "https://www.ss.lv/lv/transport/cars/dacia/sell/",
+        "Daewoo" : "https://www.ss.lv/lv/transport/cars/daewoo/sell/",
+        "Dodge" : "https://www.ss.lv/lv/transport/cars/dodge/sell/",
+        "Fiat" : "https://www.ss.lv/lv/transport/cars/fiat/sell/",
+        "Ford" : "https://www.ss.lv/lv/transport/cars/ford/sell/",
+        "Honda" : "https://www.ss.lv/lv/transport/cars/honda/sell/",
+        "Hyundai" : "https://www.ss.lv/lv/transport/cars/hyundai/sell/",
+        "Infinity" : "https://www.ss.lv/lv/transport/cars/infiniti/sell/",
+        "Jaguar" : "https://www.ss.lv/lv/transport/cars/jaguar/sell/",
+        "Jeep" : "https://www.ss.lv/lv/transport/cars/jeep/sell/",
+        "Kia" : "https://www.ss.lv/lv/transport/cars/kia/sell/",
+        "Lancia" : "https://www.ss.lv/lv/transport/cars/lancia/sell/",
+        "Land-Rover" : "https://www.ss.lv/lv/transport/cars/land-rover/sell/",
+        "Lexus" : "https://www.ss.lv/lv/transport/cars/lexus/sell/",
+        "Mazda" : "https://www.ss.lv/lv/transport/cars/mazda/sell/",
+        "Mercedes" : "https://www.ss.lv/lv/transport/cars/mercedes/sell/",
+        "Mini" : "https://www.ss.lv/lv/transport/cars/mini/sell/",
+        "Mitsubishi" : "https://www.ss.lv/lv/transport/cars/mitsubishi/sell/",
+        "Nissan" : "https://www.ss.lv/lv/transport/cars/nissan/sell/",
+        "Opel" : "https://www.ss.lv/lv/transport/cars/opel/sell/",
+        "Peugeot" : "https://www.ss.lv/lv/transport/cars/peugeot/sell/",
+        "Porsche" : "https://www.ss.lv/lv/transport/cars/porsche/sell/",
+        "Renault" : "https://www.ss.lv/lv/transport/cars/renault/sell/",
+        "Saab" : "https://www.ss.lv/lv/transport/cars/saab/sell/",
+        "Seat" : "https://www.ss.lv/lv/transport/cars/seat/sell/",
+        "Skoda" : "https://www.ss.lv/lv/transport/cars/skoda/sell/",
+        "Ssangyong" : "https://www.ss.lv/lv/transport/cars/ssangyong/sell/",
+        "Subaru" : "https://www.ss.lv/lv/transport/cars/subaru/sell/",
+        "Suzuki" : "https://www.ss.lv/lv/transport/cars/suzuki/sell/",
+        "Toyota" : "https://www.ss.lv/lv/transport/cars/toyota/sell/",
+        "Volkswagen" : "https://www.ss.lv/lv/transport/cars/volkswagen/sell/",
+        "Volvo" : "https://www.ss.lv/lv/transport/cars/volvo/sell/"
+    }
     
-    return TOPIC_DICT, TAB_DICT
+    return TOPIC_DICT, TAB_DICT, CAR_MAKE_DICT
