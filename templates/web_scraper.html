@@ -4,70 +4,130 @@
 
 <script src="{{ url_for('static', filename='node_modules/three/build/three.js')}}"></script>
 <script src="{{ url_for('static', filename='js/blankBg.js')}}"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
 
 <div class="post-container mdl-grid">
-    <!-- 2col side that is hidden on small screens -->
-    <!-- <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div> -->
-    <div class="post-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--12-col">
-      <h3>Vehicle Project</h3>
-        <form class="ui form" action = "{{ url_for('web_scraper') }}" method = "post">
-          {% if selected_make != '' %}
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          {% else %}
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-invalid">
-          {% endif %}
-            <select class="mdl-textfield__input" id="make" name="make" >
-              <option></option>
-              {% for t in CAR_MAKE_DICT.keys() %}
-              <option value={{t}}>{{t}}</option>
-              {% endfor %}
-            </select>
-            <label class="mdl-textfield__label" for="make">Make</label>
-            <span id="id_msg" class="mdl-textfield__error"> No vehicle make selected. </span>
-          </div>
-          <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" type="submit" name="action">Submit</button>
-        </form>   
+  <!-- 2col side that is hidden on small screens -->
+  <!-- <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div> -->
+  <div class="post-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--12-col">
+    <h3>Vehicle Project Data</h3>
+      <form class="ui form" action = "{{ url_for('web_scraper') }}" method = "post">
+        <!-- Make dropdown -->
         {% if selected_make != '' %}
-        <div class="vehicle-chips">
-          <span class="mdl-chip">
-            <span class="mdl-chip__text"> {{selected_make}} </span>
-          </span>
-        </div>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        {% else %}
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label is-invalid">
         {% endif %}
-
-        <!-- TABLE -->
-        {% if mycursor %}
-
-          {% if mycursorCount %}
-            {% for z in mycursorCount %}
-            <p>Latest 30 out of total of {{z[0]}} records</p>
+          <select class="mdl-textfield__input" id="make" name="make" >
+            <option></option>
+            {% for t in CAR_MAKE_DICT.keys() %}
+            <option value={{t}}>{{t}}</option>
             {% endfor %}
-          {% endif %}
-          <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
-            <!-- Head -->
-            <thead>
-              <tr>
-                {% for h in TableHeader_List %}
-                  <th>{{h}}</th>
-                {% endfor %}
-              </tr>
-            </thead>
-            <!-- Body -->
-            <tbody>
-              {% for t in mycursor %}
-              <tr>
-                {% for v in t.values() %}
-                <td>{{v}}</td>
-                {% endfor %}
-              </tr>  
-              {% endfor %}
-            </tbody>
-          </table>
+          </select>
+          <label class="mdl-textfield__label" for="make">Make</label>
+          <span id="id_msg" class="mdl-textfield__error"> No vehicle make selected. </span>
+        </div>
+        <!-- Model dropdown -->
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="model_dropdown">
+          <select class="mdl-textfield__input" id="model" name="model" >
+            <option></option>
+          </select>
+          <label class="mdl-textfield__label" for="model">Model</label>
+          <span id="id_msg" class="mdl-textfield__error"> No vehicle model selected. </span>
+        </div>
+        <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" type="submit" name="action">Submit</button>
+      </form>   
+      <!-- Chip Make -->
+      {% if selected_make != '' %}
+      <div class="vehicle-chips">
+        <span class="mdl-chip">
+          <span class="mdl-chip__text"> {{selected_make}} </span>
+        </span>
+      <!-- Chip Model -->
+      {% if selected_model != '' %}
+        <span class="mdl-chip">
+          <span class="mdl-chip__text"> {{selected_model}} </span>
+        </span>
+      {% endif %}
+      </div>
+      {% endif %}
+
+
+      <!-- TABLE -->
+      {% if mycursor %}
+
+        {% if rowCount %}
+          <p>Latest 30 out of total of {{rowCount[0]}} records</p>
         {% endif %}
+        <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+          <!-- Head -->
+          <thead>
+            <tr>
+              {% for h in TableHeader_List %}
+                <th>{{h}}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <!-- Body -->
+          <tbody>
+            {% for t in mycursor %}
+            <tr>
+              {% for v in t.values() %}
+              <td>{{v}}</td>
+              {% endfor %}
+            </tr>  
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
 
 
-    </div>
   </div>
+</div>
 
+<!-- handle interactive dropdown logic -->
+<script charset="utf-8" type="text/javascript">
+  // this is called a javascript closure. it also wont run the code until the page is finished loading
+  // and it protects the scope of your variables from other code you may later add to the page
+  $(function() {
+      var select_make = $('#make'),
+          select_model = $('#model_dropdown');
+          select_model_list = $('#model');
+
+      select_model.attr('hidden', true);
+
+      select_make.on('change', function() {
+        getUpdatedSettings();
+      });
+
+      function getUpdatedSettings() {
+        // make the selections disabled while fetching new data
+        select_model.attr('hidden', false);
+
+        // data to send back to the server
+        var send = {
+            make: select_make.val()
+        };
+
+        // this send the selected make and get existing model list
+        $.getJSON("/_get_updated_settings", send, function(response) 
+        {
+            // console.log(response);
+
+            //populate model dropdown
+            // select_model.empty();
+            $.each(response.model, function (index, value) {
+              select_model_list.append(
+                $('<option>', {
+                    value: value,
+                    text: value
+                }, '</option>'))
+            });
+        });
+          
+      }
+
+  });
+</script>
 
 {% endblock %}

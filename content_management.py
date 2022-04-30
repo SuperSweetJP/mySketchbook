@@ -60,17 +60,18 @@ def Content():
             ],
         "DATA": 
             [
-                #CardTitle, CardType, SupportingText, Date, Link, [Chips], Width(col)-optional
-                # [
-                #     "Welcome2", 
-                #     "seethrough-card", 
-                #     "Hey some very intriguing text here. I am kindof thinking about that girl.. She was something.", 
-                #     "01/01/2022", 
-                #     "text_entry2", 
-                #     ["Accounts receivable", "BOM Journal", "Invoice"],
-                #     8
-                # ],
-                # [
+                # CardTitle, CardType, SupportingText, Date, Link, [Chips], Width(col)-optional
+                [
+                    "Vehicle project data", 
+                    "seethrough-card", 
+                    "Data gathered by web scraper, to be used in Vehicle Project.", 
+                    "23/04/2022", 
+                    "web_scraper", 
+                    ["Python", "MySQL", "WebScraper"],
+                    6,
+                    # r"img/gifs/ClampQuaternion.gif"
+                ]
+                # ,[
                 #     "BOM journal creation2", 
                 #     "seethrough-card", 
                 #     "The victory is imminent, push forward with boldness", 
