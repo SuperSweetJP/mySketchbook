@@ -2,7 +2,7 @@ from distutils.log import error
 from wsgiref.simple_server import make_server
 from flask import Flask, render_template, redirect, request, url_for, session, jsonify
 from flask_session import Session
-from .content_management import Content
+from content_management import Content
 import mysql.connector
 from dotenv import load_dotenv, find_dotenv
 import os
@@ -143,5 +143,5 @@ if __name__ == "__main__":
 
   session.init_app(app)
 
-  app.debug = True
+  app.debug = os.environ.get("DEBUG")
   app.run()

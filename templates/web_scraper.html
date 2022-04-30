@@ -56,7 +56,7 @@
       <!-- TABLE -->
       {% if mycursor %}
 
-        {% if rowCount %}
+        {% if rowCount and rowCount[0] >= 30 %}
           <p>Latest 30 out of total of {{rowCount[0]}} records</p>
         {% endif %}
         <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
