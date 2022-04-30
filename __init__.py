@@ -96,16 +96,11 @@ def web_scraper():
         sqlSelect = "SELECT Marka, Gads, Motors, Karba, Nobr, Virsb, Skate, Cena, date(FirstSeen), date(LastSeen), DATEDIFF(LastSeen, FirstSeen) AS UpForDays from CarsTable WHERE Category = %s order by LastSeen desc Limit 30"
         parm = (CAR_MAKE_DICT[selected_make], )
 
-      mycursorCount = mydb.cursor(buffered=True)
-      mycursor = mydb.cursor(buffered=True, dictionary=True)
-
-      sqlSelectCount = "SELECT COUNT(*) from carstable WHERE Category = %s"
-      sqlSelect = "SELECT Marka, Gads, Motors, Karba, Nobr, Virsb, Skate, Cena, date(FirstSeen), date(LastSeen), DATEDIFF(LastSeen, FirstSeen) AS UpForDays from carstable WHERE Category = %s order by LastSeen desc Limit 30"
-      parm = (CAR_MAKE_DICT[selected_make],)
+      
 
       mydb, mycursorCount = getMyCursor(sqlSelectCount, parm)
       mydb2, mycursor = getMyCursor(sqlSelect, parm, True)
-      
+
       rowCount = [item[0] for item in mycursorCount.fetchall()]
 
       return render_template("web_scraper.html", TOPIC_DICT = TOPIC_DICT, TAB_DICT = TAB_DICT, CAR_MAKE_DICT = CAR_MAKE_DICT, selected_make = selected_make, selected_model = selected_model, mycursor = mycursor, TableHeader_List = TableHeader_List, rowCount = rowCount)
