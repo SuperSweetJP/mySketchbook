@@ -2,7 +2,7 @@ from distutils.log import error
 from wsgiref.simple_server import make_server
 from flask import Flask, render_template, redirect, request, url_for, session, jsonify
 from flask_session import Session
-from content_management import Content
+from .content_management import Content
 import mysql.connector
 from dotenv import load_dotenv, find_dotenv
 import os
@@ -89,11 +89,11 @@ def web_scraper():
       #alter sql queries and parms if model selected
       if(selected_model != ''):
         sqlSelectCount = "SELECT COUNT(*) from CarsTable WHERE Category = %s AND Marka = %s"
-        sqlSelect = "SELECT Marka, Gads, Motors, Karba, Nobr, Virsb, Skate, Cena, date(FirstSeen), date(LastSeen), DATEDIFF(LastSeen, FirstSeen) AS UpForDays from CarsTable WHERE Category = %s AND Marka = %s order by LastSeen desc Limit 30"
+        sqlSelect = "SELECT Marka, GadsMod, Motors, Karba, Nobr, Virsb, Skate, Cena, date(FirstSeen), date(LastSeen), DATEDIFF(LastSeen, FirstSeen) AS UpForDays from CarsTable WHERE Category = %s AND Marka = %s order by LastSeen desc Limit 30"
         parm = (CAR_MAKE_DICT[selected_make], selected_model)
       else:
         sqlSelectCount = "SELECT COUNT(*) from CarsTable WHERE Category = %s"
-        sqlSelect = "SELECT Marka, Gads, Motors, Karba, Nobr, Virsb, Skate, Cena, date(FirstSeen), date(LastSeen), DATEDIFF(LastSeen, FirstSeen) AS UpForDays from CarsTable WHERE Category = %s order by LastSeen desc Limit 30"
+        sqlSelect = "SELECT Marka, GadsMod, Motors, Karba, Nobr, Virsb, Skate, Cena, date(FirstSeen), date(LastSeen), DATEDIFF(LastSeen, FirstSeen) AS UpForDays from CarsTable WHERE Category = %s order by LastSeen desc Limit 30"
         parm = (CAR_MAKE_DICT[selected_make], )
 
       
@@ -116,10 +116,11 @@ def get_updated_settings():
   output = {}
   if(make != ''):
     parm = (CAR_MAKE_DICT[make],)
-    sqlSelectModels = "SELECT DISTINCT Marka from CarsTable WHERE Category = %s"
+    sqlSelectModels = "SELECT DISTINCT Marka from CarsTable WHERE Category = %s and Marka <> '' ORDER BY Marka ASC"
 
     mydb, mycursor = getMyCursor(sqlSelectModels, parm, True)
     output['model'] = [item['Marka'] for item in mycursor.fetchall()]
+    
   
   return jsonify(output)
 
