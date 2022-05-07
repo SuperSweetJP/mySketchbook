@@ -1,8 +1,9 @@
 from distutils.log import error
 from wsgiref.simple_server import make_server
-from flask import Flask, render_template, redirect, request, url_for, session, jsonify
+from flask import Flask, render_template, redirect, request, url_for, session, jsonify, make_response
 from flask_session import Session
-from .content_management import Content
+import json
+from content_management import Content
 import mysql.connector
 from dotenv import load_dotenv, find_dotenv
 import os
@@ -20,6 +21,7 @@ def hello():
 
 @app.route("/dynamics_notes/")
 def dynamicsNotes():
+  #!!!TAB_DICT is necessary for tab generation!!!
   return render_template("dynamics_notes.html", TOPIC_DICT = TOPIC_DICT, TAB_DICT = TAB_DICT)
 
 @app.errorhandler(404)
@@ -107,6 +109,23 @@ def web_scraper():
 
   return render_template("web_scraper.html", TOPIC_DICT = TOPIC_DICT, TAB_DICT = TAB_DICT, CAR_MAKE_DICT = CAR_MAKE_DICT, selected_make = selected_make, TableHeader_List = TableHeader_List)
 
+@app.route("/vp_data_viz/")
+def vp_data_viz():
+  sqlSelect = "select count(*) as cnt, Category from CarsTable group by Category order by cnt DESC;"
+  mydb2, mycursor = getMyCursor(sqlSelect, True)
+
+  cntData = mycursor.fetchall()
+  cntDict = {}
+  for t in cntData:
+    strValueList = [t[1]]
+    strValue = strValueList[0].replace("'", "")
+    if(strValue in list(CAR_MAKE_DICT.values())):
+      cntDict[list(CAR_MAKE_DICT.keys())[list(CAR_MAKE_DICT.values()).index(strValue)]] = t[0]
+
+  jsonDict = jsonify(cntDict)
+  
+  return render_template("vp_data_viz.html", cntDict = jsonDict.data, TAB_DICT = TAB_DICT)
+
 #handle dynamic dropdown values > js
 @app.route('/_get_updated_settings')
 def get_updated_settings():
@@ -124,7 +143,7 @@ def get_updated_settings():
   
   return jsonify(output)
 
-def getMyCursor(_sqlSelect, _parm, _dict = False):
+def getMyCursor(_sqlSelect, _parm = None, _dict = False):
   mydb = mysql.connector.connect(
       host=os.environ.get("SBHOST"),
       user=os.environ.get("SBUSER"),
@@ -139,6 +158,7 @@ def getMyCursor(_sqlSelect, _parm, _dict = False):
 
 if __name__ == "__main__":
   app.config.from_pyfile('settings.py')
+  app.config['JSON_SORT_KEYS'] = False
   app.secret_key = os.environ.get("SBSECRETKEY")
   app.config['SESSION_TYPE'] = 'filesystem'
 

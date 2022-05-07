@@ -68,17 +68,19 @@ def Content():
                     "23/04/2022", 
                     "web_scraper", 
                     ["Python", "MySQL", "WebScraper"],
-                    6,
+                    4,
                     # r"img/gifs/ClampQuaternion.gif"
                 ]
-                # ,[
-                #     "BOM journal creation2", 
-                #     "seethrough-card", 
-                #     "The victory is imminent, push forward with boldness", 
-                #     "02/02/2022", 
-                #     "text_entry2",
-                #     ["Accounts payable", "Receipt", "Vendor"]
-                # ]
+                ,[
+                    "Vehicle project data visualization", 
+                    "seethrough-card", 
+                    "Example data visualization using D3.js library", 
+                    "04/05/2022", 
+                    "vp_data_viz", 
+                    ["Python", "MySQL", "WebScraper"],
+                    4,
+                    # r"img/gifs/ClampQuaternion.gif"
+                ]
             ]
     }
 

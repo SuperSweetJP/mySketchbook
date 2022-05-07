@@ -1,0 +1,122 @@
+{% extends "header.html" %}
+
+{% block body %}
+
+<script src="{{ url_for('static', filename='node_modules/three/build/three.js')}}"></script>
+<script src="{{ url_for('static', filename='js/blankBg.js')}}"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<div class="post-container mdl-grid">
+  <!-- 2col side that is hidden on small screens -->
+  <!-- <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div> -->
+  <div class="post-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--12-col">
+    <h3>Vehicle Project Data</h3>
+
+    <div id="div_basicResize"></div>
+
+  </div>
+</div>
+
+<!-- <style>
+  svg rect {
+      fill: orange;
+  }
+
+  svg text {
+      fill:black;
+      font: 10px sans-serif;
+      text-anchor: end;
+  }
+</style> -->
+
+<script>
+
+  var data = '{{ cntDict }}';
+
+  //this is needed to remove html special characters that come as a result of flasks jsonify
+  var decoded = $("<div/>").html(data).text();
+  //there is still b'{json}' left, remove that via substring
+  var decoded = decoded.substring(2, decoded.length-1);
+
+  const dataObj = JSON.parse(decoded);
+
+  
+  let margin = {top: 20, right: 50, bottom: 30, left: 80};
+  let svgWidth = 1300, svgHeight = 1550;
+  let height = svgHeight- margin.top- margin.bottom, width = svgWidth - margin.left - margin.right;
+  let sourceNames = [], sourceCount = [];
+  titleColor = "black";
+  titleAltColor = "currentColor", // title fill color when atop background
+  color = "orange";
+
+  let x = d3.scaleLinear().rangeRound([0, width]),
+      y = d3.scaleBand().rangeRound([0, height]).padding(0.1);
+  for(let key in dataObj){
+      if(dataObj.hasOwnProperty(key)){
+          sourceNames.push(key);
+          sourceCount.push(parseInt(dataObj[key]));
+      }
+  }
+  x.domain([0, d3.max(sourceCount, function(d) { return d; })]);
+  y.domain(sourceNames);
+
+  const yAxis = d3.axisLeft(y).tickSizeOuter(0);
+  // console.log(sourceNames);
+  // console.log(sourceCount);
+
+  let svg = d3.select("#div_basicResize").append("svg");
+  svg.attr('height', svgHeight)
+      .attr('width', svgWidth);
+
+  svg = svg.append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  svg.append("g")
+      .attr("transform", "translate(0, " + height + ")")
+      .call(d3.axisBottom(x))
+      ;
+
+  svg.append("g")
+      .call(d3.axisLeft(y).tickSizeOuter(0).tickSize(0))
+      ;
+          
+  // Create rectangles
+  let bars = svg.selectAll('.bar')
+      .data(sourceNames)
+      .enter()
+      .append("g");
+
+  bars.append('rect')
+      .attr("fill", color)
+      .attr('class', 'bar')
+      .attr("x", function(d) { return 0; })
+      .attr("y", function(d) { return y(d); })
+      .attr("width", function(d){return x(dataObj[d])})
+      .attr("height", function(d) { return y.bandwidth(); });
+      
+  bars.append("text")
+      .text(function(d) { 
+        return dataObj[d];
+      })
+      .attr("x", function(d){
+        // console.log(dataObj[d]);
+        //+40 here moves the count to the right side
+        return x(dataObj[d]) +40;
+      })
+      .attr("y", function(d){
+        // console.log(d);
+        return y(d) + y.bandwidth() * (0.5 + 0.1); // here 0.1 is the padding scale
+      })
+      .attr("font-family" , "sans-serif")
+      .attr("font-size" , "14px")
+      .attr("fill" , titleColor)
+      .attr("text-anchor", "end")
+      // .call(text => text.filter(i => x(X[i]) - x(0) < 20) // short bars
+      //       .attr("dx", +4)
+      //       .attr("fill", "red")
+      //       .attr("text-anchor", "start"));
+  
+</script>
+
+{% endblock %}
