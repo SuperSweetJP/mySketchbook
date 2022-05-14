@@ -44,7 +44,6 @@
     // Omit any data not present in the y-domain.
     const I = d3.range(X.length).filter(i => yDomain.has(Y[i]));
 
-
     // Compute the default height.
     if (height === undefined) height = Math.ceil((yDomain.size + yPadding) * 25) + marginTop + marginBottom;
     if (yRange === undefined) yRange = [marginTop, height - marginBottom];
@@ -55,16 +54,11 @@
         .attr("viewBox", [0, 0, width, height])
         .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
 
-    // Construct scales and axes.
-    // const xScale = xType(xDomain, xRange);  //x will be updated based on current window size.
+    // Construct Y scales and axes.
     const yScale = d3.scaleBand(yDomain, yRange).padding(yPadding);
-    // const xAxis = d3.axisTop(xScale).ticks(width / 80, xFormat);
     const yAxis = d3.axisLeft(yScale).tickSizeOuter(0);
 
-    // // Compute titles.
-    // const formatValue = xScale.tickFormat(100, xFormat);
-    //     title = i => `${formatValue(X[i])}`;
-
+    //xAxis
     svg.append("g")
         .attr("transform", `translate(0,${marginTop})`) //0 on x, 30down on y
         .attr("id", "xAxis")
@@ -80,6 +74,42 @@
             .attr("text-anchor", "end")
             .text(xLabel));
 
+    //yAxis with ticks and names
+    svg.append("g")
+        .attr("transform", `translate(${marginLeft},0)`)
+        .call(yAxis);
+
+    //create bars
+    svg.append("g")
+        .attr("id", "rect")
+        .attr("fill", color)
+        .selectAll("rect")
+        .data(I)
+        .join("rect")
+        .attr("y", i => yScale(Y[i]))
+        .attr("height", yScale.bandwidth());
+
+    //create barText
+    svg.append("g")
+        .attr("id", "barText")
+        .attr("fill", titleColor)
+        .attr("text-anchor", "end")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", 10)
+        .selectAll("text")
+        .data(I)
+        .join("text")
+        .attr("class", "foo")
+        // .attr("x", i => xScale(X[i]))
+        .attr("y", i => yScale(Y[i]) + yScale.bandwidth() / 2)
+        .attr("dy", "0.35em")
+        .attr("dx", -4)
+        // .text(title)
+        // .call(text => text.filter(i => xScale(X[i]) - xScale(0) < 20) // short bars
+        //     .attr("dx", +4)
+        //     .attr("fill", titleAltColor)
+        //     .attr("text-anchor", "start"));
+
     function ChartResize() {
         // get the current width of the div where the chart appear, and attribute it to Svg
         currentWidth = parseInt(d3.select('#div_basicResize').style('width'), 10);
@@ -87,16 +117,43 @@
         svg.attr("width", currentWidth)
             .attr("viewBox","0 0 " + currentWidth + " " + height)
 
-
-
+        //recalculate scale and axis for x
         var xScale = xType(xDomain, xRangeCur);  //x will be updated based on current window size.
-        console.log(xScale);
         var xAxis = d3.axisTop(xScale).ticks(currentWidth / 80, xFormat); //how many ticks to display.
 
+        //update x axis with new values
         svg.select("#xAxis").attr("transform", `translate(0,${marginTop})`).call(xAxis) //0 on x, 30down on y;
         svg.select("#xAxisText")
             .attr("x", currentWidth - marginRight)
             .attr("y", -22)
+
+        // update the bar size
+        d3.selectAll("rect")
+            .data(I)
+            .attr("x", xScale(0))
+            .attr("width", i => xScale(X[i]) - xScale(0));
+
+        // d3.selectAll("text")
+        //     .data(I)
+        //     .attr("x", i => xScale(X[i]))
+
+        console.log(d3.selectAll(".foo"));
+        console.log(I);
+
+        //calculate values on a 100% scale
+        const formatValue = xScale.tickFormat(100, xFormat);
+        title = i => `${formatValue(X[i])}`;
+
+        //this can be done differently for my example, where I don't need xscale
+        //hence don't need to redo all of these. Or at least the part above.
+        d3.selectAll(".foo")
+            .data(I)
+            .attr("x", i => xScale(X[i]))
+            .text(title)
+                .call(text => text.filter(i => xScale(X[i]) - xScale(0) < 30) // short bars
+                    .attr("dx", +4)
+                    .attr("fill", titleAltColor)
+                    .attr("text-anchor", "start"));
     }
 
     ChartResize();
