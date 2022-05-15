@@ -11,6 +11,14 @@ import os
 TOPIC_DICT, TAB_DICT, CAR_MAKE_DICT = Content()
 
 app = Flask(__name__)
+app.config.from_pyfile('settings.py')
+app.config['JSON_SORT_KEYS'] = True
+#these do not work. ToDo: rework the config
+app.secret_key = os.environ.get("SBSECRETKEY")
+app.config['SESSION_TYPE'] = 'filesystem'
+app.debug = os.environ.get("DEBUG")
+
+
 session = Session()
 load_dotenv(find_dotenv()) 
 
@@ -111,19 +119,23 @@ def web_scraper():
 
 @app.route("/vp_data_viz/")
 def vp_data_viz():
+  # print(app.config)
+
   sqlSelect = "select count(*) as cnt, Category from CarsTable group by Category order by cnt DESC;"
-  mydb2, mycursor = getMyCursor(sqlSelect, True)
+  mydb2, mycursor = getMyCursor(sqlSelect, None, False)
 
   cntData = mycursor.fetchall()
   cntDict = {}
   for t in cntData:
+    # print(t)
     strValueList = [t[1]]
     strValue = strValueList[0].replace("'", "")
     if(strValue in list(CAR_MAKE_DICT.values())):
       cntDict[list(CAR_MAKE_DICT.keys())[list(CAR_MAKE_DICT.values()).index(strValue)]] = t[0]
 
+  # print(cntDict)
   jsonDict = jsonify(cntDict)
-  
+  # print(jsonDict.data)
   return render_template("vp_data_viz.html", cntDict = jsonDict.data, TAB_DICT = TAB_DICT)
 
 #handle dynamic dropdown values > js
@@ -157,12 +169,5 @@ def getMyCursor(_sqlSelect, _parm = None, _dict = False):
   return mydb, mycursor
 
 if __name__ == "__main__":
-  app.config.from_pyfile('settings.py')
-  app.config['JSON_SORT_KEYS'] = False
-  app.secret_key = os.environ.get("SBSECRETKEY")
-  app.config['SESSION_TYPE'] = 'filesystem'
-
   session.init_app(app)
-
-  app.debug = os.environ.get("DEBUG")
   app.run()

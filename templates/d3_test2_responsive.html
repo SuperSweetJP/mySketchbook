@@ -41,8 +41,13 @@
     if (yDomain === undefined) yDomain = Y;
     yDomain = new d3.InternSet(yDomain);
 
+    // console.log(yDomain);
+
     // Omit any data not present in the y-domain.
     const I = d3.range(X.length).filter(i => yDomain.has(Y[i]));
+
+    console.log(Y);
+    console.log(I);
 
     // Compute the default height.
     if (height === undefined) height = Math.ceil((yDomain.size + yPadding) * 25) + marginTop + marginBottom;
