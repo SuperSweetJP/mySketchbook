@@ -7,15 +7,20 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
 <script src="https://d3js.org/d3.v7.min.js"></script>
 
-<div class="post-container mdl-grid">
+<div class="dashboard-container mdl-grid">
   <!-- 2col side that is hidden on small screens -->
   <!-- <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div> -->
-  <div class="post-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--12-col">
-    <h3>Vehicle Project Data</h3>
+  <!-- <div class="post-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--12-col"> -->
+    <div class="dashboard-card-holder mdl-cell mdl-cell--12-col mdl-grid mdl-color--white">
+        <div class="dashboard-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-cell--12-col-mobile mdl-color--white mdl-shadow--2dp">
+            <div id="div_basicResize"></div>
+        </div>
+        <div class="spinner-holder dashboard-card mdl-cell mdl-cell--6-col mdl-color--white mdl-shadow--4dp">
+            <!-- MDL Spinner Component with Single Color -->
+            <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+        </div>
+    </div>
 
-    <div id="div_basicResize"></div>
-
-  </div>
 </div>
 
 <!-- <style>

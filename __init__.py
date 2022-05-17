@@ -99,21 +99,30 @@ def web_scraper():
       #alter sql queries and parms if model selected
       if(selected_model != ''):
         sqlSelectCount = "SELECT COUNT(*) from CarsTable WHERE Category = %s AND Marka = %s"
+        sqlSelectFrequency = """SELECT DATE_FORMAT(`FirstSeen`,'%Y%m') AS YearMonth, Count(*) as Count
+                                FROM CarsTable WHERE Category = %s AND Marka = %s
+                                GROUP BY YearMonth, Category, Marka"""
         sqlSelect = "SELECT Marka, GadsMod, Motors, Karba, Nobr, Virsb, Skate, Cena, date(FirstSeen), date(LastSeen), DATEDIFF(LastSeen, FirstSeen) AS UpForDays from CarsTable WHERE Category = %s AND Marka = %s order by LastSeen desc Limit 30"
         parm = (CAR_MAKE_DICT[selected_make], selected_model)
       else:
         sqlSelectCount = "SELECT COUNT(*) from CarsTable WHERE Category = %s"
+        sqlSelectFrequency = """SELECT DATE_FORMAT(`FirstSeen`,'%Y%m') AS YearMonth, Count(*) as Count
+                                FROM CarsTable WHERE Category = %s
+                                GROUP BY YearMonth, Category"""
         sqlSelect = "SELECT Marka, GadsMod, Motors, Karba, Nobr, Virsb, Skate, Cena, date(FirstSeen), date(LastSeen), DATEDIFF(LastSeen, FirstSeen) AS UpForDays from CarsTable WHERE Category = %s order by LastSeen desc Limit 30"
         parm = (CAR_MAKE_DICT[selected_make], )
 
-      
-
       mydb, mycursorCount = getMyCursor(sqlSelectCount, parm)
       mydb2, mycursor = getMyCursor(sqlSelect, parm, True)
+      mydb3, mycursorFrequency = getMyCursor(sqlSelectFrequency, parm, True)
 
       rowCount = [item[0] for item in mycursorCount.fetchall()]
 
-      return render_template("web_scraper.html", TOPIC_DICT = TOPIC_DICT, TAB_DICT = TAB_DICT, CAR_MAKE_DICT = CAR_MAKE_DICT, selected_make = selected_make, selected_model = selected_model, mycursor = mycursor, TableHeader_List = TableHeader_List, rowCount = rowCount)
+      freqDict = mycursorFrequency.fetchall()
+      freqDict = jsonify(freqDict)
+      print(freqDict)
+
+      return render_template("web_scraper.html", TOPIC_DICT = TOPIC_DICT, TAB_DICT = TAB_DICT, CAR_MAKE_DICT = CAR_MAKE_DICT, selected_make = selected_make, selected_model = selected_model, mycursor = mycursor, TableHeader_List = TableHeader_List, rowCount = rowCount, freqDict = freqDict.data)
 
   return render_template("web_scraper.html", TOPIC_DICT = TOPIC_DICT, TAB_DICT = TAB_DICT, CAR_MAKE_DICT = CAR_MAKE_DICT, selected_make = selected_make, TableHeader_List = TableHeader_List)
 
@@ -137,6 +146,27 @@ def vp_data_viz():
   jsonDict = jsonify(cntDict)
   # print(jsonDict.data)
   return render_template("vp_data_viz.html", cntDict = jsonDict.data, TAB_DICT = TAB_DICT)
+
+@app.route("/vp_data_dashboard/")
+def vp_data_dashboard():
+  # print(app.config)
+
+  sqlSelect = "select count(*) as cnt, Category from CarsTable group by Category order by cnt DESC;"
+  mydb2, mycursor = getMyCursor(sqlSelect, None, False)
+
+  cntData = mycursor.fetchall()
+  cntDict = {}
+  for t in cntData:
+    # print(t)
+    strValueList = [t[1]]
+    strValue = strValueList[0].replace("'", "")
+    if(strValue in list(CAR_MAKE_DICT.values())):
+      cntDict[list(CAR_MAKE_DICT.keys())[list(CAR_MAKE_DICT.values()).index(strValue)]] = t[0]
+
+  # print(cntDict)
+  jsonDict = jsonify(cntDict)
+  # print(jsonDict.data)
+  return render_template("vp_data_dashboard.html", cntDict = jsonDict.data, TAB_DICT = TAB_DICT)
 
 #handle dynamic dropdown values > js
 @app.route('/_get_updated_settings')

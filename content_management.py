@@ -62,9 +62,19 @@ def Content():
             [
                 # CardTitle, CardType, SupportingText, Date, Link, [Chips], Width(col)-optional
                 [
+                    "Vehicle project dashboard", 
+                    "seethrough-card", 
+                    "Dashboard. Under construction.", 
+                    "17/05/2022", 
+                    "vp_data_dashboard", 
+                    ["Python", "Flask", "D3.js"],
+                    4,
+                    # r"img/gifs/ClampQuaternion.gif"
+                ],
+                [
                     "Vehicle project data visualization", 
                     "seethrough-card", 
-                    "Example data visualization using D3.js library", 
+                    "Example data visualization using D3.js library.", 
                     "04/05/2022", 
                     "vp_data_viz", 
                     ["Python", "MySQL", "WebScraper"],
@@ -74,7 +84,9 @@ def Content():
                 [
                     "Vehicle project data", 
                     "seethrough-card", 
-                    "Data gathered by web scraper, to be used in Vehicle Project.", 
+                    """Data gathered by web scraper, to be used in Vehicle Project. 
+                        ToDo: make table size responsive, OR redesign for mobile.
+                    """, 
                     "23/04/2022", 
                     "web_scraper", 
                     ["Python", "MySQL", "WebScraper"],
