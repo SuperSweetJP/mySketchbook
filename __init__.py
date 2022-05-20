@@ -7,8 +7,21 @@ from content_management import Content
 import mysql.connector
 from dotenv import load_dotenv, find_dotenv
 import os
+import sentry_sdk
+from flask import Flask
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 TOPIC_DICT, TAB_DICT, CAR_MAKE_DICT = Content()
+
+# sentry_sdk.init(
+#     dsn="https://d62e88e038c944849054a1cd7ef9a402@o1254638.ingest.sentry.io/6422628",
+#     integrations=[FlaskIntegration()],
+
+#     # Set traces_sample_rate to 1.0 to capture 100%
+#     # of transactions for performance monitoring.
+#     # We recommend adjusting this value in production.
+#     traces_sample_rate=1.0
+# )
 
 app = Flask(__name__)
 app.config.from_pyfile('settings.py')
@@ -99,16 +112,18 @@ def web_scraper():
       #alter sql queries and parms if model selected
       if(selected_model != ''):
         sqlSelectCount = "SELECT COUNT(*) from CarsTable WHERE Category = %s AND Marka = %s"
-        sqlSelectFrequency = """SELECT DATE_FORMAT(`FirstSeen`,'%Y%m') AS YearMonth, Count(*) as Count
-                                FROM CarsTable WHERE Category = %s AND Marka = %s
-                                GROUP BY YearMonth, Category, Marka"""
+        sqlSelectFrequency = """SELECT T1.yearMonth, Count(T2.RecId) as Count FROM calendarTable T1
+                                LEFT JOIN CarsTable T2 on T1.db_date = DATE(T2.FirstSeen) and T2.Category = %s and T2.Marka = %s
+                                WHERE T1.db_date < CURDATE()
+                                GROUP BY T1.YearMonth"""
         sqlSelect = "SELECT Marka, GadsMod, Motors, Karba, Nobr, Virsb, Skate, Cena, date(FirstSeen), date(LastSeen), DATEDIFF(LastSeen, FirstSeen) AS UpForDays from CarsTable WHERE Category = %s AND Marka = %s order by LastSeen desc Limit 30"
         parm = (CAR_MAKE_DICT[selected_make], selected_model)
       else:
         sqlSelectCount = "SELECT COUNT(*) from CarsTable WHERE Category = %s"
-        sqlSelectFrequency = """SELECT DATE_FORMAT(`FirstSeen`,'%Y%m') AS YearMonth, Count(*) as Count
-                                FROM CarsTable WHERE Category = %s
-                                GROUP BY YearMonth, Category"""
+        sqlSelectFrequency = """SELECT T1.yearMonth, Count(T2.RecId) as Count FROM calendarTable T1
+                                LEFT JOIN CarsTable T2 on T1.db_date = DATE(T2.FirstSeen) and T2.Category = %s
+                                WHERE T1.db_date < CURDATE()
+                                GROUP BY T1.YearMonth"""
         sqlSelect = "SELECT Marka, GadsMod, Motors, Karba, Nobr, Virsb, Skate, Cena, date(FirstSeen), date(LastSeen), DATEDIFF(LastSeen, FirstSeen) AS UpForDays from CarsTable WHERE Category = %s order by LastSeen desc Limit 30"
         parm = (CAR_MAKE_DICT[selected_make], )
 
@@ -120,7 +135,7 @@ def web_scraper():
 
       freqDict = mycursorFrequency.fetchall()
       freqDict = jsonify(freqDict)
-      print(freqDict)
+      # print(freqDict)
 
       return render_template("web_scraper.html", TOPIC_DICT = TOPIC_DICT, TAB_DICT = TAB_DICT, CAR_MAKE_DICT = CAR_MAKE_DICT, selected_make = selected_make, selected_model = selected_model, mycursor = mycursor, TableHeader_List = TableHeader_List, rowCount = rowCount, freqDict = freqDict.data)
 
@@ -152,7 +167,12 @@ def vp_data_dashboard():
   # print(app.config)
 
   sqlSelect = "select count(*) as cnt, Category from CarsTable group by Category order by cnt DESC;"
-  mydb2, mycursor = getMyCursor(sqlSelect, None, False)
+  sqlSelectFrequency = """SELECT T1.yearMonth, Count(T2.RecId) as Count FROM calendarTable T1
+                        LEFT JOIN CarsTable T2 on T1.db_date = DATE(T2.FirstSeen)
+                        WHERE T1.db_date < CURDATE()
+                        GROUP BY T1.YearMonth"""
+  mydb, mycursor = getMyCursor(sqlSelect, None, False)
+  mydb2, mycursorFreq = getMyCursor(sqlSelectFrequency, None, True)
 
   cntData = mycursor.fetchall()
   cntDict = {}
@@ -163,10 +183,12 @@ def vp_data_dashboard():
     if(strValue in list(CAR_MAKE_DICT.values())):
       cntDict[list(CAR_MAKE_DICT.keys())[list(CAR_MAKE_DICT.values()).index(strValue)]] = t[0]
 
-  # print(cntDict)
   jsonDict = jsonify(cntDict)
-  # print(jsonDict.data)
-  return render_template("vp_data_dashboard.html", cntDict = jsonDict.data, TAB_DICT = TAB_DICT)
+
+  freqDict = mycursorFreq.fetchall()
+  freqDict = jsonify(freqDict)
+
+  return render_template("vp_data_dashboard.html", cntDict = jsonDict.data, freqDict = freqDict.data, TAB_DICT = TAB_DICT)
 
 #handle dynamic dropdown values > js
 @app.route('/_get_updated_settings')

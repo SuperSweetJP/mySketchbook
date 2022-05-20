@@ -15,28 +15,17 @@
         <div class="dashboard-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-cell--12-col-mobile mdl-color--white mdl-shadow--2dp">
             <div id="div_basicResize"></div>
         </div>
-        <div class="spinner-holder dashboard-card mdl-cell mdl-cell--6-col mdl-color--white mdl-shadow--4dp">
+        <div class="dashboard-card dashboard-card mdl-cell mdl-cell--6-col mdl-color--white mdl-shadow--4dp">
             <!-- MDL Spinner Component with Single Color -->
-            <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+            <!-- <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div> -->
+            <div id="div_basicResize2"></div>
         </div>
     </div>
 
 </div>
 
-<!-- <style>
-  svg rect {
-      fill: orange;
-  }
-
-  svg text {
-      fill:black;
-      font: 10px sans-serif;
-      text-anchor: end;
-  }
-</style> -->
-
+<!-- GRAPH1 -->
 <script>
-
   var data = '{{ cntDict }}';
 
   //this is needed to remove html special characters that come as a result of flasks jsonify
@@ -214,9 +203,141 @@
   }
 
   ChartResize();
-
   window.addEventListener('resize', ChartResize );
-  
 </script>
+
+<!-- GRAPH2 -->
+<!-- frequency graph -->
+<script>
+    //SVG size
+    width = parseInt(d3.select('#div_basicResize2').style('width'), 10); // the outer width of the chart, in pixels
+    height = 400; // the outer height of the chart, in pixels
+    //CHART PARAMS
+    x = (d, i) => d.yearMonth; // given d in data, returns the (quantitative) x-value //this shows the d3.map function what values from array to return as X
+    y = d => d.Count; // given d in data, returns the (ordinal) y-value
+    xDomain = undefined; // [xmin, xmax]
+    //yDomain = d3.groupSort(dataObjSorted, ([d]) => -d.frequency, d => d.letter); // an array of (ordinal) y-values
+    yDomain = undefined;
+    xPadding = 0.1; // amount of y-range to reserve to separate bars
+    marginTop = 20, // the top margin, in pixels
+    marginRight = 0, // the right margin, in pixels
+    marginBottom = 30, // the bottom margin, in pixels
+    marginLeft = 40, // the left margin, in pixels
+    yFormat = "s";
+    yRange = [height - marginBottom, marginTop], // [bottom, top]
+    xRange = [marginLeft, width - marginRight], // [left, right]
+    yType = d3.scaleLinear; // type of x-scale
+    yLabel = "YYYYMM →";
+    color = '#848C8E';
+    mouseoverColor = '#F44336';
+    titleColor = "white"; // title fill color when atop bar
+    titleAltColor = "currentColor"; // title fill color when atop background
+    title = undefined; // given d in data, returns the title text
+  
+    svg = undefined;
+    X = undefined;
+  
+    var data = '{{ freqDict }}';
+    console.log(data);
+    if(data) {
+      BuildChart();
+      ChartResize();
+    }
+  
+    function BuildChart() {
+      //this is needed to remove html special characters that come as a result of flasks jsonify
+      var decoded = $("<div/>").html(data).text();
+      //there is still b'{json}' left, remove that via substring
+      var decoded = decoded.substring(2, decoded.length-1);
+  
+      const dataObj = JSON.parse(decoded);
+      // console.log(dataObj);
+  
+      X = d3.map(dataObj, x);
+      const Y = d3.map(dataObj, y);
+  
+      // Compute default domains, and unique the x-domain.
+      if (xDomain === undefined) xDomain = X;
+      if (yDomain === undefined) yDomain = [0, d3.max(Y)];
+      xDomain = new d3.InternSet(xDomain);
+  
+      // Omit any data not present in the x-domain.
+      const I = d3.range(X.length).filter(i => xDomain.has(X[i]));
+  
+      svg = d3.select("#div_basicResize").append("svg")
+          .attr("width", width)
+          .attr("height", height)
+          .attr("viewBox", [0, 0, width, height])
+          .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+  
+      // Construct scales, axes, and formats.
+      //const xScale = d3.scaleBand(xDomain, xRange).padding(xPadding);
+      const yScale = yType(yDomain, yRange);
+      //const xAxis = d3.axisBottom(xScale).tickSizeOuter(0);
+      const yAxis = d3.axisLeft(yScale).ticks(height / 40, yFormat);
+  
+      const formatValue = yScale.tickFormat(100, yFormat);
+      title = i => `${X[i]}\n${formatValue(Y[i])}`;
+  
+      svg.append("g")
+          .attr("transform", `translate(${marginLeft},0)`)
+          .attr("id", "yAxis")
+          .call(yAxis)
+          .call(g => g.select(".domain").remove())
+          .call(g => g.selectAll(".tick line").clone()
+              .attr("x2", width - marginLeft - marginRight)
+              .attr("stroke-opacity", 0.1))
+          .call(g => g.append("text")
+              .attr("x", -marginLeft)
+              .attr("y", 10)
+              .attr("fill", "currentColor")
+              .attr("text-anchor", "start")
+              .text(yLabel));
+  
+      const bar = svg.append("g")
+        .attr("fill", color)
+        .selectAll("rect")
+        .data(I)
+        .join("rect")
+          .attr("y", i => yScale(Y[i]))
+          .attr("height", i => yScale(0) - yScale(Y[i]))
+          .on('mouseover', function(d) {
+                  d3.select(this).attr("fill", mouseoverColor)
+              })
+          .on('mouseout', function(d) {
+                    d3.select(this).attr("fill", color)
+                })
+  
+      if (title) bar.append("title")
+          .text(title);
+  
+      svg.append("g")
+        .attr("class", "barText")
+        .attr("transform", `translate(0,${height - marginBottom})`)
+        //.call(xAxis);
+    }
+  
+    function ChartResize() {
+      currentWidth = parseInt(d3.select('#div_basicResize').style('width'), 10);
+      xRangeCur = [marginLeft, currentWidth - marginRight];
+  
+      svg.attr("width", currentWidth)
+            .attr("viewBox","0 0 " + currentWidth + " " + height)
+  
+      var xScale = d3.scaleBand(xDomain, xRangeCur).padding(xPadding);
+      var xAxis = d3.axisBottom(xScale).tickSizeOuter(0);
+  
+      // update the bar size
+      d3.selectAll("rect")
+        .attr("x", i => xScale(X[i]))
+        .attr("width", xScale.bandwidth());
+  
+      d3.selectAll(".barText").call(xAxis);
+  
+    }
+  
+    window.addEventListener('resize', ChartResize );
+  
+  </script>
 
 {% endblock %}

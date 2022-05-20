@@ -72,16 +72,6 @@ def Content():
                     # r"img/gifs/ClampQuaternion.gif"
                 ],
                 [
-                    "Vehicle project data visualization", 
-                    "seethrough-card", 
-                    "Example data visualization using D3.js library.", 
-                    "04/05/2022", 
-                    "vp_data_viz", 
-                    ["Python", "MySQL", "WebScraper"],
-                    4,
-                    # r"img/gifs/ClampQuaternion.gif"
-                ],
-                [
                     "Vehicle project data", 
                     "seethrough-card", 
                     """Data gathered by web scraper, to be used in Vehicle Project. 

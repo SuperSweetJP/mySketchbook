@@ -7,10 +7,10 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
 <script src="https://d3js.org/d3.v7.min.js"></script>
 
-<div class="post-container mdl-grid">
+<div class="dashboard-container mdl-grid">
   <!-- 2col side that is hidden on small screens -->
   <!-- <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div> -->
-  <div class="post-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell--6-col-tablet mdl-cell--10-col-desktop mdl-cell--stretch">
+  <div class="dashboard-card mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell--12-col-tablet mdl-cell--12-col-desktop  mdl-cell--12-col-mobile mdl-cell--stretch">
     <h3>Vehicle Project Data</h3>
       <p> Note, period of 202108-202110 is missing from the data due to power outtage.. </p>
       <form class="ui form" action = "{{ url_for('web_scraper') }}" method = "post">
@@ -96,7 +96,7 @@
   width = parseInt(d3.select('#div_basicResize').style('width'), 10); // the outer width of the chart, in pixels
   height = 400; // the outer height of the chart, in pixels
   //CHART PARAMS
-  x = (d, i) => d.YearMonth; // given d in data, returns the (quantitative) x-value //this shows the d3.map function what values from array to return as X
+  x = (d, i) => d.yearMonth; // given d in data, returns the (quantitative) x-value //this shows the d3.map function what values from array to return as X
   y = d => d.Count; // given d in data, returns the (ordinal) y-value
   xDomain = undefined; // [xmin, xmax]
   //yDomain = d3.groupSort(dataObjSorted, ([d]) => -d.frequency, d => d.letter); // an array of (ordinal) y-values
@@ -104,13 +104,14 @@
   xPadding = 0.1; // amount of y-range to reserve to separate bars
   marginTop = 20, // the top margin, in pixels
   marginRight = 0, // the right margin, in pixels
-  marginBottom = 30, // the bottom margin, in pixels
+  marginBottom = 60, // the bottom margin, in pixels
   marginLeft = 40, // the left margin, in pixels
   yFormat = "s";
   yRange = [height - marginBottom, marginTop], // [bottom, top]
   xRange = [marginLeft, width - marginRight], // [left, right]
   yType = d3.scaleLinear; // type of x-scale
-  yLabel = "YYYYMM →";
+  yLabel = "↑ Freq";
+  xLabel = "YYYYMM →"
   color = '#848C8E';
   mouseoverColor = '#F44336';
   titleColor = "white"; // title fill color when atop bar
@@ -154,9 +155,7 @@
         .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
 
     // Construct scales, axes, and formats.
-    //const xScale = d3.scaleBand(xDomain, xRange).padding(xPadding);
     const yScale = yType(yDomain, yRange);
-    //const xAxis = d3.axisBottom(xScale).tickSizeOuter(0);
     const yAxis = d3.axisLeft(yScale).ticks(height / 40, yFormat);
 
     const formatValue = yScale.tickFormat(100, yFormat);
@@ -166,10 +165,11 @@
         .attr("transform", `translate(${marginLeft},0)`)
         .attr("id", "yAxis")
         .call(yAxis)
-        .call(g => g.select(".domain").remove())
-        .call(g => g.selectAll(".tick line").clone()
-            .attr("x2", width - marginLeft - marginRight)
-            .attr("stroke-opacity", 0.1))
+        .call(g => g.select(".domain").remove())  // removes the axis bar on left side
+        // .call(g => g.selectAll(".tick line").clone()
+        //     // .attr("x2", width - marginLeft - marginRight)
+        //     // .attr("stroke-opacity", 0.1)
+        //     )
         .call(g => g.append("text")
             .attr("x", -marginLeft)
             .attr("y", 10)
@@ -182,10 +182,14 @@
       .selectAll("rect")
       .data(I)
       .join("rect")
-        //.attr("x", i => xScale(X[i]))
         .attr("y", i => yScale(Y[i]))
         .attr("height", i => yScale(0) - yScale(Y[i]))
-        //.attr("width", xScale.bandwidth());
+        .on('mouseover', function(d) {
+                d3.select(this).attr("fill", mouseoverColor)
+            })
+        .on('mouseout', function(d) {
+                  d3.select(this).attr("fill", color)
+              })
 
     if (title) bar.append("title")
         .text(title);
@@ -194,6 +198,12 @@
       .attr("class", "barText")
       .attr("transform", `translate(0,${height - marginBottom})`)
       //.call(xAxis);
+      .call(g => g.append("text")
+            .attr("x", width - marginRight)
+            .attr("y", 35)
+            .attr("fill", "currentColor")
+            .attr("text-anchor", "end")
+            .text(xLabel));
   }
 
   function ChartResize() {
@@ -201,10 +211,23 @@
     xRangeCur = [marginLeft, currentWidth - marginRight];
 
     svg.attr("width", currentWidth)
-          .attr("viewBox","0 0 " + currentWidth + " " + height)
+          .attr("viewBox","0 0 " + currentWidth + " " + height);
+
+    d3.select("#yAxis").selectAll(".tick line")
+            .attr("x2", currentWidth - marginLeft - marginRight)
+            .attr("stroke-opacity", 0.1);
 
     var xScale = d3.scaleBand(xDomain, xRangeCur).padding(xPadding);
-    var xAxis = d3.axisBottom(xScale).tickSizeOuter(0);
+    var xAxis = d3.axisBottom(xScale).tickSizeOuter(0)
+      //show every third lable if bar width on smaller screens
+      .tickFormat((interval,i) => {
+        if (xScale.bandwidth() < 35) {
+          return i%3 !== 0 ? " ": interval;
+        }else {
+          return interval;
+        }
+
+      });
 
     // update the bar size
     d3.selectAll("rect")
