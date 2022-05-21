@@ -167,12 +167,12 @@ def vp_data_dashboard():
   # print(app.config)
 
   sqlSelect = "select count(*) as cnt, Category from CarsTable group by Category order by cnt DESC;"
-  sqlSelectFrequency = """SELECT T1.yearMonth, Count(T2.RecId) as Count FROM calendarTable T1
-                        LEFT JOIN CarsTable T2 on T1.db_date = DATE(T2.FirstSeen)
-                        WHERE T1.db_date < CURDATE()
-                        GROUP BY T1.YearMonth"""
+  # sqlSelectFrequency = """SELECT T1.yearMonth, Count(T2.RecId) as Count FROM calendarTable T1
+  #                       LEFT JOIN CarsTable T2 on T1.db_date = DATE(T2.FirstSeen)
+  #                       WHERE T1.db_date < CURDATE()
+  #                       GROUP BY T1.YearMonth"""
   mydb, mycursor = getMyCursor(sqlSelect, None, False)
-  mydb2, mycursorFreq = getMyCursor(sqlSelectFrequency, None, True)
+  # mydb2, mycursorFreq = getMyCursor(sqlSelectFrequency, None, True)
 
   cntData = mycursor.fetchall()
   cntDict = {}
@@ -185,10 +185,12 @@ def vp_data_dashboard():
 
   jsonDict = jsonify(cntDict)
 
-  freqDict = mycursorFreq.fetchall()
-  freqDict = jsonify(freqDict)
+  # freqDict = mycursorFreq.fetchall()
+  # freqDict = jsonify(freqDict)
 
-  return render_template("vp_data_dashboard.html", cntDict = jsonDict.data, freqDict = freqDict.data, TAB_DICT = TAB_DICT)
+  return render_template("vp_data_dashboard.html", cntDict = jsonDict.data, 
+                                                    # freqDict = freqDict.data, 
+                                                    TAB_DICT = TAB_DICT)
 
 #handle dynamic dropdown values > js
 @app.route('/_get_updated_settings')

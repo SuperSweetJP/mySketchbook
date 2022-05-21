@@ -199,6 +199,7 @@
       .attr("transform", `translate(0,${height - marginBottom})`)
       //.call(xAxis);
       .call(g => g.append("text")
+            .attr("id", "xAxisText")
             .attr("x", width - marginRight)
             .attr("y", 35)
             .attr("fill", "currentColor")
@@ -216,6 +217,10 @@
     d3.select("#yAxis").selectAll(".tick line")
             .attr("x2", currentWidth - marginLeft - marginRight)
             .attr("stroke-opacity", 0.1);
+
+    svg.select("#xAxisText")
+            .attr("x", currentWidth - marginRight)
+            .attr("y", 35)
 
     var xScale = d3.scaleBand(xDomain, xRangeCur).padding(xPadding);
     var xAxis = d3.axisBottom(xScale).tickSizeOuter(0)
