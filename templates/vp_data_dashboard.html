@@ -10,13 +10,17 @@
 <div class="dashboard-container mdl-grid">
     <div class="dashboard-card-holder mdl-cell mdl-cell--12-col mdl-grid mdl-color--white">
         <div class="dashboard-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-cell--12-col-mobile mdl-color--white mdl-shadow--2dp">
+            <h3> Total count / make </h3>
             <div id="div_basicResize"></div>
         </div>
-        <div class="spinner-holder dashboard-card mdl-cell mdl-cell--6-col mdl-color--white mdl-shadow--4dp" id="loading_spinner" hidden="true">
-            <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
-        </div>
+        <!-- <div class="spinner-holder dashboard-card mdl-cell mdl-cell--6-col mdl-color--white mdl-shadow--4dp" id="loading_spinner" hidden="true">
+
+        </div> -->
         <div class="dashboard-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-cell--12-col-mobile mdl-color--white mdl-shadow--2dp">
+            <h3> Total count of new adverts / month </h3>
+            <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active" id="loading_spinner" hidden="true"></div>
             <div id="div_basicResize2"></div>
+            <p id="freqDataTime"></p>
         </div>
     </div>
 </div>
@@ -25,158 +29,66 @@
 <script src="{{ url_for('static', filename='js/horizontalBarChart.js')}}"></script>
 <script>
     chartParams = {
-                // x: d => d.frequency,
-                // y: d => d.letter,
-                // yDomain: d3.groupSort(alphabet, ([d]) => -d.frequency, d => d.letter), // sort by descending frequency
                 xFormat: "s",
-                xLabel: "Frequency →",
-                color: '#848C8E',
+                xLabel: "Freq →",
+                color: '#8EA604',
+                // color: '#848C8E',
                 mouseoverColor: '#F44336'
             }
 
-    const resizeParams = BarChart('{{ cntDict }}', '#div_basicResize', chartParams);
-    const resizeParams2 = BarChart('{{ cntDict }}', '#div_basicResize2', chartParams);
-    // BarChart('{{ cntDict }}', '#div_basicResize2', chartParams);01
-
+    const resizeParams = HorizontalBarChart('{{ cntDict }}', '#div_basicResize', chartParams);
     ChartResize('#div_basicResize', resizeParams);
-    ChartResize('#div_basicResize2', resizeParams2);
-    
-    //ChartResize('#div_basicResize');
     window.addEventListener('resize', () => {ChartResize('#div_basicResize', resizeParams);} );
-    window.addEventListener('resize', () => {ChartResize('#div_basicResize2', resizeParams2);} );
 </script>
 
+<!-- GRAPH2 -->
+<script src="{{ url_for('static', filename='js/verticalBarChart.js')}}"></script>
+<script charset="utf-8" type="text/javascript">
+    var loadSpinner = $('#loading_spinner');
+    var freqTimeText = $('#freqDataTime');
 
-<!-- <script>
-    //SVG size
-    width = parseInt(d3.select('#div_basicResize2').style('width'), 10); // the outer width of the chart, in pixels
-    height = 400; // the outer height of the chart, in pixels
-    //CHART PARAMS
-    x = (d, i) => d.yearMonth; // given d in data, returns the (quantitative) x-value //this shows the d3.map function what values from array to return as X
-    y = d => d.Count; // given d in data, returns the (ordinal) y-value
-    xDomain = undefined; // [xmin, xmax]
-    //yDomain = d3.groupSort(dataObjSorted, ([d]) => -d.frequency, d => d.letter); // an array of (ordinal) y-values
-    yDomain = undefined;
-    xPadding = 0.1; // amount of y-range to reserve to separate bars
-    marginTop = 20, // the top margin, in pixels
-    marginRight = 0, // the right margin, in pixels
-    marginBottom = 30, // the bottom margin, in pixels
-    marginLeft = 40, // the left margin, in pixels
-    yFormat = "s";
-    yRange = [height - marginBottom, marginTop], // [bottom, top]
-    xRange = [marginLeft, width - marginRight], // [left, right]
-    yType = d3.scaleLinear; // type of x-scale
-    yLabel = "YYYYMM →";
-    color = '#848C8E';
-    mouseoverColor = '#F44336';
-    titleColor = "white"; // title fill color when atop bar
-    titleAltColor = "currentColor"; // title fill color when atop background
-    title = undefined; // given d in data, returns the title text
-  
-    svg2 = undefined;
-    X = undefined;
-  
-    var data = '{{ freqDict }}';
-    console.log(data);
-    if(data) {
-      BuildChart();
-      ChartResize();
-    }
-  
-    function BuildChart() {
-      //this is needed to remove html special characters that come as a result of flasks jsonify
-      var decoded = $("<div/>").html(data).text();
-      //there is still b'{json}' left, remove that via substring
-      var decoded = decoded.substring(2, decoded.length-1);
-  
-      const dataObj = JSON.parse(decoded);
-      // console.log(dataObj);
-  
-      X = d3.map(dataObj, x);
-      const Y = d3.map(dataObj, y);
-  
-      // Compute default domains, and unique the x-domain.
-      if (xDomain === undefined) xDomain = X;
-      if (yDomain === undefined) yDomain = [0, d3.max(Y)];
-      xDomain = new d3.InternSet(xDomain);
-  
-      // Omit any data not present in the x-domain.
-      const I = d3.range(X.length).filter(i => xDomain.has(X[i]));
-  
-      svg2 = d3.select("#div_basicResize").append("svg")
-          .attr("width", width)
-          .attr("height", height)
-          .attr("viewBox", [0, 0, width, height])
-          .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
-  
-      // Construct scales, axes, and formats.
-      //const xScale = d3.scaleBand(xDomain, xRange).padding(xPadding);
-      const yScale = yType(yDomain, yRange);
-      //const xAxis = d3.axisBottom(xScale).tickSizeOuter(0);
-      const yAxis = d3.axisLeft(yScale).ticks(height / 40, yFormat);
-  
-      const formatValue = yScale.tickFormat(100, yFormat);
-      title = i => `${X[i]}\n${formatValue(Y[i])}`;
-  
-      svg2.append("g")
-          .attr("transform", `translate(${marginLeft},0)`)
-          .attr("id", "yAxis")
-          .call(yAxis)
-          .call(g => g.select(".domain").remove())
-          .call(g => g.selectAll(".tick line").clone()
-              .attr("x2", width - marginLeft - marginRight)
-              .attr("stroke-opacity", 0.1))
-          .call(g => g.append("text")
-              .attr("x", -marginLeft)
-              .attr("y", 10)
-              .attr("fill", "currentColor")
-              .attr("text-anchor", "start")
-              .text(yLabel));
-  
-      const bar = svg2.append("g")
-        .attr("fill", color)
-        .selectAll("rect")
-        .data(I)
-        .join("rect")
-          .attr("y", i => yScale(Y[i]))
-          .attr("height", i => yScale(0) - yScale(Y[i]))
-          .on('mouseover', function(d) {
-                  d3.select(this).attr("fill", mouseoverColor)
-              })
-          .on('mouseout', function(d) {
-                    d3.select(this).attr("fill", color)
-                })
-  
-      if (title) bar.append("title")
-          .text(title);
-  
-      svg2.append("g")
-        .attr("class", "barText")
-        .attr("transform", `translate(0,${height - marginBottom})`)
-        //.call(xAxis);
-    }
-  
-    function ChartResize() {
-      currentWidth = parseInt(d3.select('#div_basicResize').style('width'), 10);
-      xRangeCur = [marginLeft, currentWidth - marginRight];
-  
-      svg2.attr("width", currentWidth)
-            .attr("viewBox","0 0 " + currentWidth + " " + height)
-  
-      var xScale = d3.scaleBand(xDomain, xRangeCur).padding(xPadding);
-      var xAxis = d3.axisBottom(xScale).tickSizeOuter(0);
-  
-      // update the bar size
-      d3.selectAll("rect")
-        .attr("x", i => xScale(X[i]))
-        .attr("width", xScale.bandwidth());
-  
-      d3.selectAll(".barText").call(xAxis);
-  
-    }
-  
-    window.addEventListener('resize', ChartResize );
-  
-  </script> -->
+    //init data load from db
+    $(document).ready(function() {
+        loadSpinner.attr('hidden', false);
+        getFrequencyData();
+    });
+    
+    var startTime = performance.now();
+    function getFrequencyData() {
+        var send = {
+            // make: select_make.val()
+        };
 
+        $.getJSON("/_get_frequency_data", send, function(response) 
+        {
+            // console.log(response);
+            loadSpinner.attr('hidden', true);
+            var endTime = performance.now();
+            
+            freqTimeText.text(`Query results returned in ${endTime - startTime} milliseconds`);
+            
+            buildVerticalBarChart(response);
+        });
+    }
+
+    function buildVerticalBarChart(freqData) {
+        verticalBarChartParams = {
+                x: d => d.yearMonth,
+                y: d => d.Count,
+                height: 400,
+                xFormat: "s",
+                xLabel: "YYYYMM →",
+                yLabel: "↑ Freq",
+                color: '#537D8D',
+                mouseoverColor: '#F44336'
+            }
+
+        const vertBarChart_resizeParams = VerticalBarChart(freqData, '#div_basicResize2', verticalBarChartParams);
+        vertBarChart_Resize('#div_basicResize2', vertBarChart_resizeParams);
+        window.addEventListener('resize', () => {vertBarChart_Resize('#div_basicResize2', vertBarChart_resizeParams);} );
+    }
+
+
+
+</script>
 {% endblock %}
