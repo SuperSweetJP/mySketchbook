@@ -195,7 +195,7 @@
         .text(title);
 
     svg.append("g")
-      .attr("class", "barText")
+      .attr("id", "barText")
       .attr("transform", `translate(0,${height - marginBottom})`)
       //.call(xAxis);
       .call(g => g.append("text")
@@ -239,7 +239,8 @@
       .attr("x", i => xScale(X[i]))
       .attr("width", xScale.bandwidth());
 
-    d3.selectAll(".barText").call(xAxis);
+    d3.select("#barText").call(xAxis);
+    console.log(d3.select("#barText"));
 
   }
 

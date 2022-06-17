@@ -113,7 +113,7 @@ def web_scraper():
       if(selected_model != ''):
         sqlSelectCount = "SELECT COUNT(*) from CarsTable WHERE Category = %s AND Marka = %s"
         sqlSelectFrequency = """SELECT T1.yearMonth, Count(T2.RecId) as Count FROM calendarTable T1
-                                LEFT JOIN CarsTable T2 on T1.db_date = DATE(T2.FirstSeen) and T2.Category = %s and T2.Marka = %s
+                                LEFT JOIN CarsTable T2 on T1.db_date = T2.DateFirst and T2.Category = %s and T2.Marka = %s
                                 WHERE T1.db_date < CURDATE()
                                 GROUP BY T1.YearMonth"""
         sqlSelect = "SELECT Marka, GadsMod, Motors, Karba, Nobr, Virsb, Skate, Cena, date(FirstSeen), date(LastSeen), DATEDIFF(LastSeen, FirstSeen) AS UpForDays from CarsTable WHERE Category = %s AND Marka = %s order by LastSeen desc Limit 30"
@@ -121,7 +121,7 @@ def web_scraper():
       else:
         sqlSelectCount = "SELECT COUNT(*) from CarsTable WHERE Category = %s"
         sqlSelectFrequency = """SELECT T1.yearMonth, Count(T2.RecId) as Count FROM calendarTable T1
-                                LEFT JOIN CarsTable T2 on T1.db_date = DATE(T2.FirstSeen) and T2.Category = %s
+                                LEFT JOIN CarsTable T2 on T1.db_date = T2.DateFirst and T2.Category = %s
                                 WHERE T1.db_date < CURDATE()
                                 GROUP BY T1.YearMonth"""
         sqlSelect = "SELECT Marka, GadsMod, Motors, Karba, Nobr, Virsb, Skate, Cena, date(FirstSeen), date(LastSeen), DATEDIFF(LastSeen, FirstSeen) AS UpForDays from CarsTable WHERE Category = %s order by LastSeen desc Limit 30"
@@ -205,12 +205,22 @@ def get_updated_settings():
 #load frequency data
 @app.route('/_get_frequency_data')
 def get_frequency_data():
-  sqlSelectFrequency = """SELECT T1.yearMonth, Count(T2.RecId) as Count FROM calendarTable T1
-                        LEFT JOIN CarsTable T2 on T1.db_date = T2.DateFirst
-                        WHERE T1.db_date <= CURDATE()
-                        GROUP BY T1.YearMonth"""
+  make = request.args.get('make')
+  parm = None
 
-  mydb2, mycursorFreq = getMyCursor(sqlSelectFrequency, None, True)
+  if(make == 'null'):
+    sqlSelectFrequency = """SELECT T1.yearMonth, Count(T2.RecId) as Count FROM calendarTable T1
+                          LEFT JOIN CarsTable T2 on T1.db_date = T2.DateFirst
+                          WHERE T1.db_date <= CURDATE()
+                          GROUP BY T1.YearMonth"""
+  else:
+    parm = (CAR_MAKE_DICT[make],)
+    sqlSelectFrequency = """SELECT T1.yearMonth, Count(T2.RecId) as Count FROM calendarTable T1
+                      LEFT JOIN CarsTable T2 on T1.db_date = T2.DateFirst and T2.Category = %s
+                      WHERE T1.db_date <= CURDATE()
+                      GROUP BY T1.YearMonth"""
+
+  mydb2, mycursorFreq = getMyCursor(sqlSelectFrequency, parm, True)
   
   freqDict = mycursorFreq.fetchall()
   freqDict = jsonify(freqDict)

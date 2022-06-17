@@ -37,12 +37,13 @@
             }
 
     const resizeParams = HorizontalBarChart('{{ cntDict }}', '#div_basicResize', chartParams);
-    ChartResize('#div_basicResize', resizeParams);
-    window.addEventListener('resize', () => {ChartResize('#div_basicResize', resizeParams);} );
+    horiBarChart_ChartResize('#div_basicResize', resizeParams);
+    window.addEventListener('resize', () => {horiBarChart_ChartResize('#div_basicResize', resizeParams);} );
 </script>
 
 <!-- GRAPH2 -->
-<script src="{{ url_for('static', filename='js/verticalBarChart.js')}}"></script>
+<!-- <script src="{{ url_for('static', filename='js/verticalBarChart.js')}}"></script> -->
+<script src="{{ url_for('static', filename='js/verticalBarChartV2.js')}}"></script>
 <script charset="utf-8" type="text/javascript">
     var loadSpinner = $('#loading_spinner');
     var freqTimeText = $('#freqDataTime');
@@ -54,9 +55,9 @@
     });
     
     var startTime = performance.now();
-    function getFrequencyData() {
+    function getFrequencyData(_make = null) {
         var send = {
-            // make: select_make.val()
+            make: _make
         };
 
         $.getJSON("/_get_frequency_data", send, function(response) 
@@ -71,6 +72,9 @@
         });
     }
 
+    //i need to split this up
+    //Or an if statement within the chart to test if there's data already present
+    //if so, then skip some parts
     function buildVerticalBarChart(freqData) {
         verticalBarChartParams = {
                 x: d => d.yearMonth,
@@ -83,9 +87,10 @@
                 mouseoverColor: '#F44336'
             }
 
-        const vertBarChart_resizeParams = VerticalBarChart(freqData, '#div_basicResize2', verticalBarChartParams);
-        vertBarChart_Resize('#div_basicResize2', vertBarChart_resizeParams);
-        window.addEventListener('resize', () => {vertBarChart_Resize('#div_basicResize2', vertBarChart_resizeParams);} );
+        vbc2_chartProc(freqData, '#div_basicResize2', verticalBarChartParams);
+        // var vertBarChart_resizeParams = VerticalBarChart(freqData, '#div_basicResize2', verticalBarChartParams);
+        // vertBarChart_Resize('#div_basicResize2', vertBarChart_resizeParams);
+        // window.addEventListener('resize', () => {vertBarChart_Resize('#div_basicResize2', vertBarChart_resizeParams);} );
     }
 
 

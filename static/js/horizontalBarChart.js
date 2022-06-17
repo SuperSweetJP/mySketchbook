@@ -1,4 +1,7 @@
-function prepData(_data) {
+
+let hbc_selectedCarMake = null;
+
+function horiBarChart_PrepData(_data) {
     //this is needed to remove html special characters that come as a result of flasks jsonify
     var decoded = $("<div/>").html(_data).text();
     //there is still b'{json}' left, remove that via substring
@@ -23,32 +26,8 @@ function prepData(_data) {
     return dataObjSorted;
 }
 
-// title = undefined; // given d in data, returns the title text
-// marginTop = 30; // the top margin, in pixels
-// marginRight = 0; // the right margin, in pixels
-// marginBottom = 10; // the bottom margin, in pixels
-// marginLeft = 70, // the left margin, in pixels
-// width = undefined; // the outer width of the chart, in pixels
-// height = undefined; // outer height, in pixels
-// xType = d3.scaleLinear; // type of x-scale
-// xDomain  = undefined; // [xmin, xmax]
-// xRange = [marginLeft, width - marginRight]; // [left, right]
-// xFormat  = undefined; // a format specifier string for the x-axis
-// xLabel  = undefined; // a label for the x-axis
-// yPadding = 0.1; // amount of y-range to reserve to separate bars
-// yDomain  = undefined; // an array of (ordinal) y-values
-// yRange  = undefined; // [top, bottom]
-// color = "currentColor"; // bar fill color
-// mouseoverColor = '#F44336';
-// titleColor = "white"; // title fill color when atop bar
-// titleAltColor = "currentColor"; // title fill color when atop background
-// I   = undefined;
-// X   = undefined;
-// Y   = undefined;
-// xScale  = undefined;
-
 //svgId
-function BarChart(data, svgDivId
+function HorizontalBarChart(data, svgDivId
     , {
     x = d => d, // given d in data, returns the (quantitative) x-value
     y = (d, i) => i, // given d in data, returns the (ordinal) y-value
@@ -73,10 +52,7 @@ function BarChart(data, svgDivId
     titleAltColor = "currentColor", // title fill color when atop background
     } = {}
     ) {
-        width = parseInt(d3.select(svgDivId).style('width'), 10);
-        console.log(marginLeft);
-
-        const dataObjProcessed = prepData(data);
+        const dataObjProcessed = horiBarChart_PrepData(data);
         const X = [], Y = [];
         for(let key in dataObjProcessed){
             if(dataObjProcessed.hasOwnProperty(key)){
@@ -141,13 +117,31 @@ function BarChart(data, svgDivId
                     d3.select(this).attr("fill", mouseoverColor)
                 })
             .on('mouseout', function(d) {
-                    d3.select(this).attr("fill", color)
+                    //keep the onMouse color for "active" selection
+                    if(d3.select(this).attr("id") == hbc_selectedCarMake) {
+                        d3.select(this).attr("fill", mouseoverColor); 
+                    }
+                    else {
+                        d3.select(this).attr("fill", color);
+                    }
                 })
             .on('click', function(d, i) {
-                    console.log(Y[i]);
+                    if(d3.select(this).attr("id") != hbc_selectedCarMake) {
+                        //reset current selection color
+                        d3.select("#" + hbc_selectedCarMake).attr("fill", color);
+
+                        hbc_selectedCarMake = Y[i];
+                        if(typeof getFrequencyData === 'function') {
+                            getFrequencyData(Y[i]);
+                        }
+                    }
+                    else {
+                        //ToDo: return to all car data
+                    }
                 })
             .attr("y", i => yScale(Y[i]))
-            .attr("height", yScale.bandwidth());
+            .attr("height", yScale.bandwidth())
+            .attr("id", i => Y[i]);
 
         //create barText
         svg.append("g")
@@ -181,7 +175,7 @@ function BarChart(data, svgDivId
         }
 }
 
-function ChartResize(svgDivId, {
+function horiBarChart_ChartResize(svgDivId, {
         marginLeft,
         marginRight,
         marginTop,

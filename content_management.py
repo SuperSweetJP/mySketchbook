@@ -64,7 +64,11 @@ def Content():
                 [
                     "Vehicle project dashboard", 
                     "seethrough-card", 
-                    "Dashboard. Under construction.", 
+                    [
+                        "Dashboard. Under construction.",
+                        "",
+                        "2022.06.14: Dynamic update vertical bar chart based on make selection from horizontal bar chart"
+                    ],
                     "17/05/2022", 
                     "vp_data_dashboard", 
                     ["Python", "Flask", "D3.js"],
@@ -74,9 +78,10 @@ def Content():
                 [
                     "Vehicle project data", 
                     "seethrough-card", 
-                    """Data gathered by web scraper, to be used in Vehicle Project. 
-                        ToDo: make table size responsive, OR redesign for mobile.
-                    """, 
+                    [
+                        "Data gathered by web scraper, to be used in Vehicle Project.", 
+                        "ToDo: make table size responsive, OR redesign for mobile."
+                    ], 
                     "23/04/2022", 
                     "web_scraper", 
                     ["Python", "MySQL", "WebScraper"],
