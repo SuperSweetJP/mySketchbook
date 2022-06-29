@@ -13,6 +13,7 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 
 TOPIC_DICT, TAB_DICT, CAR_MAKE_DICT = Content()
 
+#ToDo: uncomment this for production
 # sentry_sdk.init(
 #     dsn="https://d62e88e038c944849054a1cd7ef9a402@o1254638.ingest.sentry.io/6422628",
 #     integrations=[FlaskIntegration()],

@@ -7,20 +7,37 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
 <script src="https://d3js.org/d3.v7.min.js"></script>
 
-<div class="dashboard-container mdl-grid">
+<div class="mdl-grid dashboard-container">
     <div class="dashboard-card-holder mdl-cell mdl-cell--12-col mdl-grid mdl-color--white">
         <div class="dashboard-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-cell--12-col-mobile mdl-color--white mdl-shadow--2dp">
-            <h3> Total count / make </h3>
+            <div class="mdl-card__title">
+                <h3> Total count / make </h3>
+                <!-- Multiline Tooltip -->
+                <div id="tt4" class="icon material-icons">info</div>
+                <div class="mdl-tooltip" for="tt4">
+                    Click on bar to select/de-select subset
+                </div>
+            </div>
             <div id="div_basicResize"></div>
         </div>
         <!-- <div class="spinner-holder dashboard-card mdl-cell mdl-cell--6-col mdl-color--white mdl-shadow--4dp" id="loading_spinner" hidden="true">
 
         </div> -->
-        <div class="dashboard-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-cell--12-col-mobile mdl-color--white mdl-shadow--2dp">
-            <h3> Total count of new adverts / month </h3>
-            <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active" id="loading_spinner" hidden="true"></div>
-            <div id="div_basicResize2"></div>
-            <p id="freqDataTime"></p>
+        <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-mobile mdl-grid mdl-grid--no-spacing">
+            <div class="dashboard-card mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-mobile mdl-color--white mdl-shadow--2dp">
+                <h3> Total count of new adverts / month </h3>
+                <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active" id="loading_spinner" hidden="true"></div>
+                <div id="div_basicResize2"></div>
+                <p id="freqDataTime"></p>
+            </div>
+            <div class="dashboard-card-separator mdl-cell--1-col"></div>
+            <div class="dashboard-card mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-mobile mdl-color--white mdl-shadow--2dp">
+                <h3> table data </h3>
+                <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active" id="loading_spinner" hidden="true"></div>
+                <div id="div_basicResize3"></div>
+                <p id="freqDataTime"></p>
+                <p> Under construction. </p>
+            </div>
         </div>
     </div>
 </div>
@@ -62,7 +79,6 @@
 
         $.getJSON("/_get_frequency_data", send, function(response) 
         {
-            // console.log(response);
             loadSpinner.attr('hidden', true);
             var endTime = performance.now();
             
@@ -72,9 +88,6 @@
         });
     }
 
-    //i need to split this up
-    //Or an if statement within the chart to test if there's data already present
-    //if so, then skip some parts
     function buildVerticalBarChart(freqData) {
         verticalBarChartParams = {
                 x: d => d.yearMonth,
@@ -88,9 +101,6 @@
             }
 
         vbc2_chartProc(freqData, '#div_basicResize2', verticalBarChartParams);
-        // var vertBarChart_resizeParams = VerticalBarChart(freqData, '#div_basicResize2', verticalBarChartParams);
-        // vertBarChart_Resize('#div_basicResize2', vertBarChart_resizeParams);
-        // window.addEventListener('resize', () => {vertBarChart_Resize('#div_basicResize2', vertBarChart_resizeParams);} );
     }
 
 

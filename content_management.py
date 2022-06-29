@@ -67,7 +67,8 @@ def Content():
                     [
                         "Dashboard. Under construction.",
                         "",
-                        "2022.06.14: Dynamic update vertical bar chart based on make selection from horizontal bar chart"
+                        "2022.06.27: Selectable subsets, CSS styling improvements for mobile.",
+                        "2022.06.14: Dynamic update vertical bar chart based on make selection from horizontal bar chart."
                     ],
                     "17/05/2022", 
                     "vp_data_dashboard", 

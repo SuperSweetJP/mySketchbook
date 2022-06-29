@@ -151,27 +151,11 @@ function vbc2_changeData(_data, _svgDivId, _x, _y, _yType, _yRange,
   const yScale = _yType(yDomain, _yRange);
   const yAxis = d3.axisLeft(yScale).ticks(_height / 40, _yFormat);
 
-
-
-  // const formatValue = yScale.tickFormat(100, _yFormat);
-  // const formatValue = yScale.tickFormat(function(d) {
-  //   if (d < 1000) //checking a condition based on that do foarmat
-  //     //provide a format
-  //     return d3.format("s");
-  //   else {
-  //    //provide some other format  
-  //    return d3.format("d"); 
-  //   }
-  // });
-  // title = i => `${X[i]}\n${formatValue(Y[i])}`;
-
   function formatValue(number){
     return (number < 1000) ? d3.format("d")(number) : d3.format(".2s")(number) 
   }
 
   title = i => `${formatValue(Y[i])}`;
-
-  // console.log(Y);
 
   d3.select(_svgDivId).select("#yAxis")
     .transition().duration(vbc2_animate ? 1000 : 0)
@@ -208,7 +192,7 @@ function vbc2_changeData(_data, _svgDivId, _x, _y, _yType, _yRange,
           .duration(vbc2_animate ? 1000 : 0)
             .attr("y", i => yScale(Y[i]))
             .attr("dy", "1.0em")
-            .attr("dx", "0.35em") //use this to position on x axis
+            // .attr("dx", "0.35em") //use this to position on x axis
             .text(title)
               .call(text => text.filter(i => yScale(0) - yScale(Y[i]) < 0.1) // short bars
                 .attr("fill", "black")
@@ -295,5 +279,9 @@ function vbc2_resize({
       return xScale(X[i]);
     });
 
-
+  //position barText values
+  d3.select(_svgDivId).select("#barText")
+          .selectAll("text")
+            .attr("dx", "0.15em") //use this to position on x axis
+            // .attr("dx", xScale.bandwidth()/3) //use this to position on x axis
 }

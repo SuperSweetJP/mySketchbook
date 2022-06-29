@@ -136,7 +136,8 @@ function HorizontalBarChart(data, svgDivId
                         }
                     }
                     else {
-                        //ToDo: return to all car data
+                        getFrequencyData();
+                        hbc_selectedCarMake = null;
                     }
                 })
             .attr("y", i => yScale(Y[i]))
