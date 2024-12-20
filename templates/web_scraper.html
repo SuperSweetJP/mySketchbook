@@ -278,7 +278,13 @@
             // console.log(response);
 
             //populate model dropdown
-            // select_model.empty();
+            select_model_list.empty();
+            select_model_list.append(
+                $('<option>', {
+                    value: '',
+                    text: '' 
+                })
+            );
             $.each(response.model, function (index, value) {
               select_model_list.append(
                 $('<option>', {

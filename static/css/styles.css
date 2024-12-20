@@ -201,6 +201,8 @@ canvas {
   padding:0px;
 }
 
+/**** Post section ****/
+
 .post-container
 {
   max-width: 1600px;
@@ -211,7 +213,7 @@ canvas {
 
 .post-content {
   border-radius: 2px;
-  padding: 80px 56px;
+  padding: 20px 56px 80px;
   margin-bottom: 80px;
 }
 
@@ -229,38 +231,108 @@ canvas {
   padding: 40px 28px;
 }
 
-/* Different card examples */
+.vehicle-chips {
+  margin-bottom: 25px;
+  margin-top: 10px;
+}
 
-/* .seethrough-card > .mdl-card__title
+/**** Dashboard1 section ****/
+
+.dashboard-container
 {
-  background-color: rgba(255, 255, 255, 0.9);;
-} */
+  /* width: calc(100% - 16px); */
+  margin: 0 50px;
+}
 
-/* .seethrough-card .mdl-card__media {
-  background-image: url('../img/gifs/ClampQuaternion.gif');
-  width: auto;
-  height: 300px;
-  padding-left:16px;
-  cursor: pointer;
-} */
+.dashboard-card {
+  border-radius: 2px;
+  padding: 20px 20px 20px;
+  /* margin-bottom: 80px; */
+}
 
-/* .quaternion-clamp .mdl-card__media {
-  background-image: url('../img/cube_viz.jpg');
-  width: auto;
-  height: 300px;
-  padding-left:16px;
-  cursor: pointer;
-} */
+.dashboard-card-holder {
+  -webkit-align-items: flex-start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -webkit-align-content: flex-start;
+      -ms-flex-line-pack: start;
+          align-content: flex-start;
+}
 
-/* .seethrough-card .mdl-card__media > h3 > a {
-  color: white !important;
-  font-weight: 400;
-  font-family: 'Roboto';
-  text-decoration: none;
-} */
+.dashboard-card-holder .dashboard-card-separator {
+  height: 16px;
+}
+
+.spinner-holder {
+  display: flex;
+  justify-content: center;
+}
+
+/**** Tablet layout ****/
+@media (max-width: 1500px) {
+  .mdl-grid
+  {
+    padding: 0px;
+    /* margin: 0px; */
+  }
+
+  .mdl-grid.mdl-grid--no-spacing
+  {
+    margin:4px;
+  }
+
+  .mdl-grid.dashboard-container
+  {
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+  }
+
+  .dashboard-card-holder
+  {
+    margin-top: 8px;
+  }
+
+  .dashboard-card {
+    margin: 4px;
+    padding: 15px 15px 15px;
+  }
+
+  .dashboard-card-holder .dashboard-card-separator {
+    height: 8px;
+  }
+}
 
 /**** Mobile layout ****/
-@media (max-width: 1024px) {
+@media (max-width: 836px) {
+  .mdl-grid
+  {
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+  }
+
+  .mdl-grid.mdl-grid--no-spacing
+  {
+    /* padding-left: 8px; */
+    padding-right: 8px; 
+    width: 100%;
+  }
+
+
+
+  .mdl-grid.dashboard-container
+  {
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .dashboard-card-holder
+  {
+    margin: 0px;
+  }
+
   .mdl-layout__tab-bar
   {
     display: none;
@@ -272,7 +344,7 @@ canvas {
   }
 
   .mdl-layout__tab-bar-container{
-    height: 10px;
+    height: 0px;
   }
 
   .mdl-layout__header-row
@@ -294,4 +366,6 @@ canvas {
   {
     display:none;
   }
+
+
 }

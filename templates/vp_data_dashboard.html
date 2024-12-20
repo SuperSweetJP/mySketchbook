@@ -1,109 +1,170 @@
-{% extends "header.html" %}
-
-{% block body %}
+{% extends "header.html" %} {% block body %}
 
 <script src="{{ url_for('static', filename='node_modules/three/build/three.js')}}"></script>
 <script src="{{ url_for('static', filename='js/blankBg.js')}}"></script>
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script
+  type="text/javascript"
+  src="https://code.jquery.com/jquery-1.7.1.min.js"
+></script>
 <script src="https://d3js.org/d3.v7.min.js"></script>
 
 <div class="mdl-grid dashboard-container">
-    <div class="dashboard-card-holder mdl-cell mdl-cell--12-col mdl-grid mdl-color--white">
-        <div class="dashboard-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-cell--12-col-mobile mdl-color--white mdl-shadow--2dp">
-            <div class="mdl-card__title">
-                <h3> Total count / make </h3>
-                <!-- Multiline Tooltip -->
-                <div id="tt4" class="icon material-icons">info</div>
-                <div class="mdl-tooltip" for="tt4">
-                    Click on bar to select/de-select subset
-                </div>
-            </div>
-            <div id="div_basicResize"></div>
+  <div
+    class="dashboard-card-holder mdl-cell mdl-cell--12-col mdl-grid mdl-color--white"
+  >
+    <div
+      class="dashboard-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-cell--12-col-mobile mdl-color--white mdl-shadow--2dp"
+    >
+      <!-- Year dropdown -->
+      <!-- <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <select class="mdl-textfield__input" id="year" name="year">
+          <option>2021</option>
+          <option>2022</option>
+        </select>
+        <label class="mdl-textfield__label" for="year">Year</label>
+      </div> -->
+      <div class="mdl-card__title">
+        <h3>Total count / make</h3>
+        <!-- Multiline Tooltip -->
+        <div id="tt4" class="icon material-icons">info</div>
+        <div class="mdl-tooltip" for="tt4">
+          <p>Click on bar to select/de-select subset</p>
+          <p>Data limited to last 2 years</p>
         </div>
-        <!-- <div class="spinner-holder dashboard-card mdl-cell mdl-cell--6-col mdl-color--white mdl-shadow--4dp" id="loading_spinner" hidden="true">
+      </div>
+
+      <div
+        class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"
+        id="loading_spinner1"
+        hidden="true"
+      ></div>
+      <div id="div_basicResize"></div>
+      <p id="freqDataTime1"></p>
+    </div>
+    <!-- <div class="spinner-holder dashboard-card mdl-cell mdl-cell--6-col mdl-color--white mdl-shadow--4dp" id="loading_spinner" hidden="true">
 
         </div> -->
-        <div class="mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-mobile mdl-grid mdl-grid--no-spacing">
-            <div class="dashboard-card mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-mobile mdl-color--white mdl-shadow--2dp">
-                <h3> Total count of new adverts / month </h3>
-                <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active" id="loading_spinner" hidden="true"></div>
-                <div id="div_basicResize2"></div>
-                <p id="freqDataTime"></p>
-            </div>
-            <div class="dashboard-card-separator mdl-cell--1-col"></div>
-            <div class="dashboard-card mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-mobile mdl-color--white mdl-shadow--2dp">
-                <h3> table data </h3>
-                <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active" id="loading_spinner" hidden="true"></div>
-                <div id="div_basicResize3"></div>
-                <p id="freqDataTime"></p>
-                <p> Under construction. </p>
-            </div>
-        </div>
+    <div
+      class="mdl-cell mdl-cell--6-col mdl-cell--12-col-tablet mdl-cell--12-col-mobile mdl-grid mdl-grid--no-spacing"
+    >
+      <div
+        class="dashboard-card mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-mobile mdl-color--white mdl-shadow--2dp"
+      >
+        <h3>Total count of new adverts / month</h3>
+        <div
+          class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"
+          id="loading_spinner"
+          hidden="true"
+        ></div>
+        <div id="div_basicResize2"></div>
+        <p id="freqDataTime"></p>
+      </div>
+      <div class="dashboard-card-separator mdl-cell--1-col"></div>
+      <div
+        class="dashboard-card mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-mobile mdl-color--white mdl-shadow--2dp"
+      >
+        <h3>table data</h3>
+        <div id="div_basicResize3"></div>
+        <p>Under construction.</p>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- GRAPH1 -->
 <script src="{{ url_for('static', filename='js/horizontalBarChart.js')}}"></script>
-<script>
-    chartParams = {
-                xFormat: "s",
-                xLabel: "Freq →",
-                color: '#8EA604',
-                // color: '#848C8E',
-                mouseoverColor: '#F44336'
-            }
-
-    const resizeParams = HorizontalBarChart('{{ cntDict }}', '#div_basicResize', chartParams);
-    horiBarChart_ChartResize('#div_basicResize', resizeParams);
-    window.addEventListener('resize', () => {horiBarChart_ChartResize('#div_basicResize', resizeParams);} );
-</script>
 
 <!-- GRAPH2 -->
 <!-- <script src="{{ url_for('static', filename='js/verticalBarChart.js')}}"></script> -->
 <script src="{{ url_for('static', filename='js/verticalBarChartV2.js')}}"></script>
 <script charset="utf-8" type="text/javascript">
-    var loadSpinner = $('#loading_spinner');
-    var freqTimeText = $('#freqDataTime');
+  //chart1
+  var freqTimeText1 = $("#freqDataTime1");
+  var loadSpinner1 = $("#loading_spinner1");
+  //chart2
+  var freqTimeText = $("#freqDataTime");
+  var loadSpinner = $("#loading_spinner");
 
-    //init data load from db
-    $(document).ready(function() {
-        loadSpinner.attr('hidden', false);
-        getFrequencyData();
+  var select_year = $("#year");
+  select_year.on("change", function () {
+    getTotals(select_year.val());
+  });
+
+  //init data load from db
+  $(document).ready(function () {
+    loadSpinner1.attr("hidden", false);
+    getTotals();
+    getFrequencyData();
+  });
+
+  var startTime1 = performance.now();
+  function getTotals(_year = null) {
+    var send = {
+      year: _year,
+    };
+
+    $.getJSON("/_get_totals", send, function (response) {
+      loadSpinner1.attr("hidden", true);
+      var endTime = performance.now();
+
+      freqTimeText1.text(
+        `Query results returned in ${endTime - startTime1} milliseconds`
+      );
+      buildMainChart(response);
     });
-    
-    var startTime = performance.now();
-    function getFrequencyData(_make = null) {
-        var send = {
-            make: _make
-        };
+  }
 
-        $.getJSON("/_get_frequency_data", send, function(response) 
-        {
-            loadSpinner.attr('hidden', true);
-            var endTime = performance.now();
-            
-            freqTimeText.text(`Query results returned in ${endTime - startTime} milliseconds`);
-            
-            buildVerticalBarChart(response);
-        });
-    }
+  function buildMainChart(totalsData) {
+    chartParams = {
+      xFormat: "s",
+      xLabel: "Freq →",
+      color: "#8EA604",
+      // color: '#848C8E',
+      mouseoverColor: "#F44336",
+    };
+    const resizeParams = HorizontalBarChart(
+      totalsData,
+      "#div_basicResize",
+      chartParams
+    );
+    horiBarChart_ChartResize("#div_basicResize", resizeParams);
+    window.addEventListener("resize", () => {
+      horiBarChart_ChartResize("#div_basicResize", resizeParams);
+    });
+    window.dispatchEvent(new Event("resize"));
+  }
 
-    function buildVerticalBarChart(freqData) {
-        verticalBarChartParams = {
-                x: d => d.yearMonth,
-                y: d => d.Count,
-                height: 400,
-                xFormat: "s",
-                xLabel: "YYYYMM →",
-                yLabel: "↑ Freq",
-                color: '#537D8D',
-                mouseoverColor: '#F44336'
-            }
+  var startTime = performance.now();
+  function getFrequencyData(_make = null) {
+    var send = {
+      make: _make,
+    };
 
-        vbc2_chartProc(freqData, '#div_basicResize2', verticalBarChartParams);
-    }
+    $.getJSON("/_get_frequency_data", send, function (response) {
+      loadSpinner.attr("hidden", true);
+      var endTime = performance.now();
 
+      freqTimeText.text(
+        `Query results returned in ${endTime - startTime} milliseconds`
+      );
 
+      buildVerticalBarChart(response);
+    });
+  }
 
+  function buildVerticalBarChart(freqData) {
+    verticalBarChartParams = {
+      x: (d) => d.yearMonth,
+      y: (d) => d.Count,
+      height: 400,
+      xFormat: "s",
+      xLabel: "YYYYMM →",
+      yLabel: "↑ Freq",
+      color: "#537D8D",
+      mouseoverColor: "#F44336",
+    };
+
+    vbc2_chartProc(freqData, "#div_basicResize2", verticalBarChartParams);
+  }
 </script>
 {% endblock %}
