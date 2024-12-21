@@ -365,3 +365,5 @@ FodyWeavers.xsd
 flask_session/
 
 .env
+
+static/maze_golf_web/

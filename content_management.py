@@ -11,6 +11,16 @@ def Content():
             [
                 #0 CardTitle, 1 CardType, 2 SupportingText, 3 Date, 4 Link (optional), 5 [Chips], 6 Width(col), [7 image loc, descr, width] (optional)
                 [
+                    "Maze Golf", 
+                    "seethrough-card", 
+                    "Unity3D project", 
+                    "21/12/2024", 
+                    "maze_golf_emb", 
+                    ["Unity3D"],
+                    6,
+                    # r"img/gifs/ClampQuaternion.gif"
+                ]
+                ,[
                     "Chess Knight model", 
                     "seethrough-card", 
                     "A knight chess piece model. Procedurally generated textures that were baked into an image.", 
@@ -33,30 +43,30 @@ def Content():
                 ,[
                     "Randomized building generator", 
                     "seethrough-card", 
-                    "Played around with javascript ThreeJS library, to create randomized building blocks. Warning, quite resource heavy.", 
+                    "Played around with javascript ThreeJS library, to create randomized building blocks.", 
                     "04/02/2022", 
                     "cityScape",
                     ["ThreeJS"],
                     6
                 ]
-                ,[
-                    "Swarm model animated", 
-                    "seethrough-card", 
-                    "For performance testing on mobile", 
-                    "03/10/2021", 
-                    "swarm_model_anim",
-                    ["Blender", "ThreeJS"],
-                    6
-                ]
-                ,[
-                    "Swarm model", 
-                    "seethrough-card", 
-                    "A creepy crawly. My first complete model, along with some textures", 
-                    "03/10/2021", 
-                    "swarm_model",
-                    ["Blender", "ThreeJS"],
-                    6
-                ]
+                # ,[
+                #     "Swarm model animated", 
+                #     "seethrough-card", 
+                #     "For performance testing on mobile", 
+                #     "03/10/2021", 
+                #     "swarm_model_anim",
+                #     ["Blender", "ThreeJS"],
+                #     6
+                # ]
+                # ,[
+                #     "Swarm model", 
+                #     "seethrough-card", 
+                #     "A creepy crawly. My first complete model, along with some textures", 
+                #     "03/10/2021", 
+                #     "swarm_model",
+                #     ["Blender", "ThreeJS"],
+                #     6
+                # ]
             ],
         "DATA": 
             [

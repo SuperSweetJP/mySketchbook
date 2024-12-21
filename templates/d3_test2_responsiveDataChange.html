@@ -1,0 +1,216 @@
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+
+<body>
+    <div id="div_basicResize"></div>
+</body>
+
+<!-- Add 2 buttons -->
+<button onclick="updateData(data)">Variable 1</button>
+<button onclick="updateData(data2)">Variable 2</button>
+
+<script>
+    data = [{"letter":"A","frequency":0.08167},{"letter":"B","frequency":0.01492},{"letter":"C","frequency":0.02782},{"letter":"D","frequency":0.04253},{"letter":"E","frequency":0.12702},{"letter":"F","frequency":0.02288},{"letter":"G","frequency":0.02015},{"letter":"H","frequency":0.06094},{"letter":"I","frequency":0.06966},{"letter":"J","frequency":0.00153},{"letter":"K","frequency":0.00772},{"letter":"L","frequency":0.04025},{"letter":"M","frequency":0.02406},{"letter":"N","frequency":0.06749},{"letter":"O","frequency":0.07507},{"letter":"P","frequency":0.01929},{"letter":"Q","frequency":0.00095},{"letter":"R","frequency":0.05987},{"letter":"S","frequency":0.06327},{"letter":"T","frequency":0.09056},{"letter":"U","frequency":0.02758},{"letter":"V","frequency":0.00978},{"letter":"W","frequency":0.0236},{"letter":"X","frequency":0.0015},{"letter":"Y","frequency":0.01974},{"letter":"Z","frequency":0.00074}];
+    data2 = [{"letter":"A","frequency":0.01167},{"letter":"B","frequency":0.01492},{"letter":"C","frequency":0.02782},{"letter":"D","frequency":0.04253},{"letter":"E","frequency":0.12702},{"letter":"F","frequency":0.02288},{"letter":"G","frequency":0.02015},{"letter":"H","frequency":0.06094},{"letter":"I","frequency":0.06966},{"letter":"J","frequency":0.00153},{"letter":"K","frequency":0.00772},{"letter":"L","frequency":0.04025},{"letter":"M","frequency":0.02406},{"letter":"N","frequency":0.06749},{"letter":"O","frequency":0.07507},{"letter":"P","frequency":0.01929},{"letter":"Q","frequency":0.00095},{"letter":"R","frequency":0.05987},{"letter":"S","frequency":0.06327},{"letter":"T","frequency":0.09056},{"letter":"U","frequency":0.02758},{"letter":"V","frequency":0.00978},{"letter":"W","frequency":0.0236},{"letter":"X","frequency":0.0015},{"letter":"Y","frequency":0.01974},{"letter":"Z","frequency":0.32074}];
+
+    width = parseInt(d3.select('#div_basicResize').style('width'), 10);
+    height = undefined;
+
+    x = d => d.frequency; // given d in data, returns the (quantitative) x-value //this shows the d3.map function what values from array to return as X
+    y = d => d.letter; // given d in data, returns the (ordinal) y-value
+    xDomain = undefined; // [xmin, xmax]
+    yDomain = d3.groupSort(data, ([d]) => -d.frequency, d => d.letter); // an array of (ordinal) y-values
+    yPadding = 0.1; // amount of y-range to reserve to separate bars
+    marginTop = 30; // the top margin, in pixels
+    marginRight = 0; // the right margin, in pixels
+    marginBottom = 10; // the bottom margin, in pixels
+    marginLeft = 30; // the left margin, in pixels
+    xFormat = "%";
+    xRange = [marginLeft, width - marginRight]; // [left, right]
+    xType = d3.scaleLinear; // type of x-scale
+    xLabel = "Frequency →";
+    color = "steelblue";
+    titleColor = "white"; // title fill color when atop bar
+    titleAltColor = "currentColor"; // title fill color when atop background
+    yRange = undefined; // [top, bottom]
+    title = undefined; // given d in data, returns the title text
+
+    // Compute values. //creates object, looks like an array..
+    var X = d3.map(data, x);
+    const Y = d3.map(data, y);
+
+    // Compute default domains, and unique the y-domain.
+    // Array of two values, 0 and max(X)
+    if (xDomain === undefined) xDomain = [0, d3.max(X)];
+    //all y values
+    if (yDomain === undefined) yDomain = Y;
+    yDomain = new d3.InternSet(yDomain);
+
+    // console.log(yDomain);
+
+    // Omit any data not present in the y-domain.
+    var I = d3.range(X.length).filter(i => yDomain.has(Y[i]));
+
+    // Compute the default height.
+    if (height === undefined) height = Math.ceil((yDomain.size + yPadding) * 25) + marginTop + marginBottom;
+    if (yRange === undefined) yRange = [marginTop, height - marginBottom];
+
+    const svg = d3.select("#div_basicResize").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", [0, 0, width, height])
+        .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+
+    // Construct Y scales and axes.
+    const yScale = d3.scaleBand(yDomain, yRange).padding(yPadding);
+    const yAxis = d3.axisLeft(yScale).tickSizeOuter(0);
+
+    //xAxis
+    svg.append("g")
+        .attr("transform", `translate(0,${marginTop})`) //0 on x, 30down on y
+        .attr("id", "xAxis")
+        .call(g => g.select(".domain").remove())
+        .call(g => g.selectAll(".tick line").clone()
+            .attr("y2", height - marginTop - marginBottom)
+            .attr("stroke-opacity", 0.1))
+        .call(g => g.append("text") //this is the "frequency" on x axis
+            .attr("id", "xAxisText")
+            .attr("x", width - marginRight)
+            .attr("y", -22)
+            .attr("fill", "currentColor")
+            .attr("text-anchor", "end")
+            .text(xLabel));
+
+    //yAxis with ticks and names
+    svg.append("g")
+        .attr("transform", `translate(${marginLeft},0)`)
+        .call(yAxis);
+
+    //create bars
+    svg.append("g")
+        .attr("id", "rect")
+        .attr("fill", color)
+        .selectAll("rect")
+        .data(I)
+        .join("rect")
+        .attr("y", i => yScale(Y[i]))
+        .attr("height", yScale.bandwidth());
+
+    //create barText
+    svg.append("g")
+        .attr("id", "barText")
+        .attr("fill", titleColor)
+        .attr("text-anchor", "end")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", 10)
+        .selectAll("text")
+        .data(I)
+        .join("text")
+        .attr("class", "foo")
+        .attr("y", i => yScale(Y[i]) + yScale.bandwidth() / 2)
+        .attr("dy", "0.35em")
+        .attr("dx", -4)
+
+    function updateData(data) {
+        X = d3.map(data, x);
+        xDomain = [0, d3.max(X)];
+
+        currentWidth = parseInt(d3.select('#div_basicResize').style('width'), 10);
+        xRangeCur = [marginLeft, currentWidth - marginRight];
+
+        xScale = xType(xDomain, xRangeCur);
+
+        //line below would work, but it is reset back to previous state if
+        //X and xDomain are not calculated, since they are used in ChartResize
+        // var xScale = xType([0, d3.max(data, d => d.frequency)], xRangeCur);
+        xAxis = d3.axisTop(xScale).ticks(currentWidth / 80, xFormat);
+        svg.select("#xAxis").transition().duration(1000).call(xAxis);
+
+
+        //=======bars=============
+        I = d3.range(X.length).filter(i => yDomain.has(Y[i]));
+
+        var u = svg.selectAll("rect")
+
+        u
+        .data(I)
+        .join("rect")
+        .transition()
+        .duration(1000)
+          .attr("x", xScale(0))
+          .attr("y", i => yScale(Y[i]))
+          .attr("width", d => xScale(X[d]) - xScale(0))
+          .attr("height", yScale.bandwidth());
+        //   .attr("height", d => height - y(d.value))
+        //   .attr("fill", "#69b3a2")
+
+        //=======text=============
+        var t = d3.selectAll(".foo");
+
+        formatValue = xScale.tickFormat(100, xFormat);
+        title = i => `${formatValue(X[i])}`;
+
+        t
+        .data(I)
+        .transition()
+        .duration(1000)
+            .attr("x", i => xScale(X[i]))
+            .text(title)
+            .call(text => text.filter(i => xScale(X[i]) - xScale(0) < 30) // short bars
+                    .attr("dx", +4)
+                    .attr("fill", titleAltColor)
+                    .attr("text-anchor", "start"))
+            .call(text => text.filter(i => xScale(X[i]) - xScale(0) >= 30) // long bars
+                  .attr("dx", -4)
+                  .attr("fill", titleColor)
+                  .attr("text-anchor", "end"));
+    } 
+
+    function ChartResize() {
+        // get the current width of the div where the chart appear, and attribute it to Svg
+        currentWidth = parseInt(d3.select('#div_basicResize').style('width'), 10);
+        xRangeCur = [marginLeft, currentWidth - marginRight];
+        svg.attr("width", currentWidth)
+            .attr("viewBox","0 0 " + currentWidth + " " + height)
+
+        //recalculate scale and axis for x
+        var xScale = xType(xDomain, xRangeCur);  //x will be updated based on current window size.
+        var xAxis = d3.axisTop(xScale).ticks(currentWidth / 80, xFormat); //how many ticks to display.
+
+        //update x axis with new values
+        svg.select("#xAxis").attr("transform", `translate(0,${marginTop})`).call(xAxis) //0 on x, 30down on y;
+        svg.select("#xAxisText")
+            .attr("x", currentWidth - marginRight)
+            .attr("y", -22)
+
+        // update the bar size
+        d3.selectAll("rect")
+            .data(I)
+            .attr("x", xScale(0))
+            .attr("width", i => xScale(X[i]) - xScale(0));
+
+        //calculate values on a 100% scale
+        var formatValue = xScale.tickFormat(100, xFormat);
+        title = i => `${formatValue(X[i])}`;
+
+        //this can be done differently for my example, where I don't need xscale
+        //hence don't need to redo all of these. Or at least the part above.
+        d3.selectAll(".foo")
+            .data(I)
+            .attr("x", i => xScale(X[i]))
+            .text(title)
+                .call(text => text.filter(i => xScale(X[i]) - xScale(0) < 30) // short bars
+                    .attr("dx", +4)
+                    .attr("fill", titleAltColor)
+                    .attr("text-anchor", "start"))
+                .call(text => text.filter(i => xScale(X[i]) - xScale(0) >= 30) // long bars
+                  .attr("dx", -4)
+                  .attr("fill", titleColor)
+                  .attr("text-anchor", "end"));
+    }
+
+    ChartResize();
+
+    window.addEventListener('resize', ChartResize );
+
+</script>

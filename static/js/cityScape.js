@@ -65,7 +65,22 @@ function init()
   cameraRotY = camera.rotation.y;
   cameraRotZ = camera.rotation.z;
 
-  controls = new THREE.OrbitControls(camera, renderer.domElement); 
+  // controls
+
+  controls = new THREE.OrbitControls( camera, renderer.domElement );
+  controls.listenToKeyEvents( window ); // optional
+
+  //controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
+
+  controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
+  controls.dampingFactor = 0.05;
+
+  controls.screenSpacePanning = false;
+
+  controls.minDistance = 100;
+  controls.maxDistance = 500;
+
+  controls.maxPolarAngle = Math.PI / 2;
 
   raycaster = new THREE.Raycaster();
   mouse = new THREE.Vector2();
@@ -208,6 +223,8 @@ function animate() {
 	// update the picking ray with the camera and mouse position
 	raycaster.setFromCamera( mouse, camera );
 
+  controls.update(); // only required if controls.enableDamping = true, or if controls.autoRotate = true
+
 	// calculate objects intersecting the picking ray
 	const intersects = raycaster.intersectObjects( scene.children );
 
@@ -246,12 +263,12 @@ function animate() {
     mouseOverObject = null;
   }
   
-  if(mousePosX && mousePosY)
-  {
-    camera.position.x = cameraPosX + mousePosX * mouseMod;
-    camera.position.y = cameraPosY + mousePosY * mouseMod;
-    camera.position.z = cameraPosZ;
-  }
+  // if(mousePosX && mousePosY)
+  // {
+  //   camera.position.x = cameraPosX + mousePosX * mouseMod;
+  //   camera.position.y = cameraPosY + mousePosY * mouseMod;
+  //   camera.position.z = cameraPosZ;
+  // }
 
   requestAnimationFrame( animate );
   renderer.render( scene, camera );
@@ -268,8 +285,6 @@ function onWindowResize() {
   renderer.setSize( window.innerWidth, window.innerHeight );
 
 }
-
-//ToDo: some sort of game with windows. store number of cubes, if all lit up, turn them all off?
 
 init();
 

@@ -18,7 +18,9 @@
         <div class="mdl-card__actions mdl-card--border"></div>
         <div class="mdl-card__text-background">
           <div class="mdl-card__supporting-text">
-            {{t[2]}}
+            {% for p in t[2] %}
+              <p>{{p}}</p>
+            {% endfor %}
           </div>
           <div class="mdl-card__supporting-chips">
             {% for c in t[5] %}

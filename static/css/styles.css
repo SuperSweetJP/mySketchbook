@@ -211,6 +211,14 @@ canvas {
   margin: 0 auto;
 }
 
+.game-container
+{
+  max-width: 800px;
+  min-width: 800px;
+  /* width: calc(100% - 16px); */
+  margin: 0 auto;
+}
+
 .post-content {
   border-radius: 2px;
   padding: 20px 56px 80px;

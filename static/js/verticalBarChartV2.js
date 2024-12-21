@@ -35,6 +35,7 @@ function vbc2_chartProc(_data, _svgDivId, {
   titleColor = "white", // title fill color when atop bar
   titleAltColor = "currentColor", // title fill color when atop background
 } = {}) {
+  // console.log(width);
   let vbc2_animate = true;
   //prep svg
   if(d3.select(_svgDivId).select("svg").empty()){
@@ -234,9 +235,11 @@ function vbc2_resize({
   xDomain,
   xPadding
 } = {}) {
+
   let svg = d3.select(_svgDivId).select('svg');
 
   currentWidth = parseInt(d3.select('#div_basicResize').style('width'), 10);
+  // console.log(currentWidth);
   xRangeCur = [marginLeft, currentWidth - marginRight];
 
   svg.attr("width", currentWidth)
