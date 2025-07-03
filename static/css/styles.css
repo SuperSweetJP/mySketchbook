@@ -190,6 +190,12 @@ h3 > a
   background:none;
 }
 
+.mdl-card__media img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 canvas {
   position: fixed;
   top: 0;

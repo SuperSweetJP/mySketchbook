@@ -81,8 +81,9 @@
             <a class="mdl-navigation__link" target="_blank" href="https://www.linkedin.com/in/janis-plavins"><img src="{{ url_for('static', filename='/img/linkedin.png')}}" alt="Linkedin" style="width:26px;height:26px;"></a>
           </nav>
         </div>
-        <!-- Tabs -->
+        <!-- Tabs --> 
         <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+        <!-- <div class="mdl-layout__tab-bar"> -->
           {% for t in TAB_DICT %}
             {% if request.path == url_for(TAB_DICT[t]) %}
               <a href="{{ url_for(TAB_DICT[t]) }}" class="mdl-layout__tab is-active">{{t}}</a>

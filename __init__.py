@@ -3,7 +3,7 @@ from wsgiref.simple_server import make_server
 from flask import Flask, render_template, redirect, request, url_for, session, jsonify, make_response
 from flask_session import Session
 import json
-# from .content_management import Content
+#from .content_management import Content
 from content_management import Content
 import mysql.connector
 from dotenv import load_dotenv, find_dotenv
@@ -93,6 +93,17 @@ def swarm_model():
 def chess_knight():
     return render_template("chess_knight.html", TOPIC_DICT=TOPIC_DICT, TAB_DICT=TAB_DICT)
 
+@app.route("/tome/")
+def tome():
+    return render_template("tome.html", TOPIC_DICT=TOPIC_DICT, TAB_DICT=TAB_DICT)
+
+@app.route("/cassette_tape/")
+def cassette_tape():
+    return render_template("cassette_tape.html", TOPIC_DICT=TOPIC_DICT, TAB_DICT=TAB_DICT)
+
+@app.route("/chalice/")
+def chalice():
+    return render_template("chalice.html", TOPIC_DICT=TOPIC_DICT, TAB_DICT=TAB_DICT)
 
 @app.route("/swarm_model_anim/")
 def swarm_model_anim():
@@ -121,6 +132,9 @@ def maze_golf():
 def maze_golf_emb():
     return render_template("maze_golf_emb.html", TOPIC_DICT=TOPIC_DICT, TAB_DICT=TAB_DICT)
 
+@app.route("/3d_menu/")
+def threed_menu():
+    return render_template("3d_menu.html", TOPIC_DICT=TOPIC_DICT, TAB_DICT=TAB_DICT)
 
 @app.route("/web_scraper/", methods=['POST', 'GET'])
 def web_scraper():

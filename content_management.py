@@ -11,6 +11,36 @@ def Content():
             [
                 #0 CardTitle, 1 CardType, 2 SupportingText, 3 Date, 4 Link (optional), 5 [Chips], 6 Width(col), [7 image loc, descr, width] (optional)
                 [
+                    "Chalice", 
+                    "seethrough-card", 
+                    "Low poly model", 
+                    "19/06/2025", 
+                    "chalice", 
+                    ["Blender", "Aseprite"],
+                    6,
+                    "img/screenshots/chalice.png"
+                ],
+                [
+                    "Cassette Tape", 
+                    "seethrough-card", 
+                    "Low poly model", 
+                    "08/06/2025", 
+                    "cassette_tape", 
+                    ["Blender", "Aseprite"],
+                    6,
+                    "img/screenshots/cassette_model.png"
+                ],
+                [
+                    "Tome", 
+                    "seethrough-card", 
+                    "Low poly model", 
+                    "01/06/2025", 
+                    "tome", 
+                    ["Blender", "Aseprite"],
+                    6,
+                    "img/screenshots/tome.png"
+                ],
+                [
                     "Maze Golf", 
                     "seethrough-card", 
                     "Unity3D project", 
@@ -18,7 +48,7 @@ def Content():
                     "maze_golf_emb", 
                     ["Unity3D"],
                     6,
-                    # r"img/gifs/ClampQuaternion.gif"
+                    "img/screenshots/maze_golf.png"
                 ]
                 ,[
                     "Chess Knight model", 
@@ -28,7 +58,7 @@ def Content():
                     "chess_knight", 
                     ["Blender", "ThreeJs"],
                     6,
-                    # r"img/gifs/ClampQuaternion.gif"
+                    "img/screenshots/chess_knight.png"
                 ]
                 ,[
                     "Clamp quaternion", 
@@ -47,7 +77,9 @@ def Content():
                     "04/02/2022", 
                     "cityScape",
                     ["ThreeJS"],
-                    6
+                    6,
+                    "img/screenshots/building_generator.png"
+                    ""
                 ]
                 # ,[
                 #     "Swarm model animated", 
