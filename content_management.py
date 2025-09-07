@@ -11,6 +11,16 @@ def Content():
             [
                 #0 CardTitle, 1 CardType, 2 SupportingText, 3 Date, 4 Link (optional), 5 [Chips], 6 Width(col), [7 image loc, descr, width] (optional)
                 [
+                    "GridTest", 
+                    "seethrough-card", 
+                    "Tech demo of grid and A* pathfinding. Only allows up/down, left/right movement", 
+                    "19/06/2025", 
+                    "grid_test_emb", 
+                    ["Unity3D", "C#"],
+                    6,
+                    "img/screenshots/grid_test.png"
+                ],
+                [
                     "Chalice", 
                     "seethrough-card", 
                     "Low poly model", 

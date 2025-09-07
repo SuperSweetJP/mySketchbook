@@ -1,0 +1,11 @@
+{% extends "header.html" %}
+
+{% block body %}
+  <script src="{{ url_for('static', filename='node_modules/three/build/three.js')}}"></script>
+
+  <div class="game-container mdl-grid">
+    <iframe id="game-frame" src="{{ url_for('grid_test') }}" frameborder="0" allowfullscreen></iframe>
+
+
+  </div>
+{% endblock %}

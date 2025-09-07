@@ -3,8 +3,8 @@ from wsgiref.simple_server import make_server
 from flask import Flask, render_template, redirect, request, url_for, session, jsonify, make_response
 from flask_session import Session
 import json
-#from .content_management import Content
-from content_management import Content
+from .content_management import Content
+#from content_management import Content
 import mysql.connector
 from dotenv import load_dotenv, find_dotenv
 import os
@@ -131,6 +131,14 @@ def maze_golf():
 @app.route("/maze_golf_emb/")
 def maze_golf_emb():
     return render_template("maze_golf_emb.html", TOPIC_DICT=TOPIC_DICT, TAB_DICT=TAB_DICT)
+
+@app.route("/grid_test/")
+def grid_test():
+    return render_template("grid_test.html", TOPIC_DICT=TOPIC_DICT, TAB_DICT=TAB_DICT)
+
+@app.route("/grid_test_emb/")
+def grid_test_emb():
+    return render_template("grid_test_emb.html", TOPIC_DICT=TOPIC_DICT, TAB_DICT=TAB_DICT)
 
 @app.route("/3d_menu/")
 def threed_menu():
