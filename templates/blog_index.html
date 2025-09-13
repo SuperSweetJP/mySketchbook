@@ -1,0 +1,32 @@
+{% extends "header.html" %}
+{% block body %}
+
+    <script src="{{ url_for('static', filename='node_modules/three/build/three.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/blankBg.js')}}"></script>
+
+    <!-- beware, this main class breaks orbit controls -->
+    <main class="mdl-layout__content">
+
+        <div class="mdl-grid demo-blog__posts">
+
+            <!-- [Title, CardType, SupportingText, Date, Link, [Chips], Width, body] -->
+            {% for t in BLOG_CARDS %}
+                <div class="{{t[1]}} mdl-card mdl-cell mdl-cell--8-col mdl-cell--{{t[6]}}-col-desktop mdl-shadow--2dp">
+                    <div class="mdl-card__title">
+                        <h3 class="mdl-card__title-text"> 
+                            <a href="{{ url_for('blog_detail', slug=t[4].split('/')[-1]) }}">{{t[0]}}</a>
+                        </h3>
+                        <div class="mdl-card__date">Date: {{t[3]}}</div>
+                    </div>
+                    <div class="mdl-card__actions mdl-card--border"></div>
+                    <div class="mdl-card__text-background">
+                        <div class="mdl-card__supporting-text">
+                            {{ t[2] }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </main>
+{% endblock %}

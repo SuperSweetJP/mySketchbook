@@ -215,8 +215,8 @@ h3 > a
 }
 
 .mdl-card__media img {
-  width: 100%;
-  height: auto;
+  max-width: 100%;   /* responsive but respects inline width/max-width */
+  height: auto;      /* keeps aspect ratio */
   display: block;
 }
 
@@ -244,7 +244,6 @@ canvas {
 @media only screen and (orientation: portrait) {
   .game-container {
     height: 45vh;
-    /* Example: stack UI vertically */
     max-width: 100%;
   }
 }
@@ -253,7 +252,6 @@ canvas {
   .game-container {
     width: 55%;
     height: 100vh;
-    /* max-width: 100%; */
   }
 }
 
@@ -262,10 +260,28 @@ canvas#unity-canvas {
     height: 100% !important;
 }
 
+figure {
+  display: table;
+}
+
+figure img {
+  display: block;
+  margin: 0;              /* let the figure handle alignment */
+}
+
+figcaption {
+  display: table-caption;
+  caption-side: bottom;   /* put caption under the image */
+  text-align: left;
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 0.3em;
+}
 
 .post-content {
+  max-width: 1000px;
   border-radius: 2px;
-  padding: 20px 56px 80px;
+  padding: 20px 125px 80px;
   margin-bottom: 80px;
 }
 
@@ -318,6 +334,14 @@ canvas#unity-canvas {
 .spinner-holder {
   display: flex;
   justify-content: center;
+}
+
+@media (min-width: 1500px) {
+  .mdl-grid.dashboard-container {
+    width: 100%;
+    max-width: none;      /* or a custom cap, e.g. 1800px */
+    margin: 0 50px;       /* keep your side gutters */
+  }
 }
 
 /**** Tablet layout ****/

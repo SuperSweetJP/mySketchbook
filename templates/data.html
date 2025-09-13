@@ -3,35 +3,38 @@
 {% block body %}
 
   <script src="{{ url_for('static', filename='node_modules/three/build/three.js')}}"></script>
-  <script src="{{ url_for('static', filename='node_modules/three/examples/js/controls/OrbitControls.js')}}"></script>
   <script src="{{ url_for('static', filename='js/blankBg.js')}}"></script>
 
   <!-- beware, this main class breaks orbit controls -->
   <main class="mdl-layout__content">
 
-    {% for t in TOPIC_DICT["DATA"] %}
-      <div class="{{t[1]}} mdl-card mdl-cell mdl-cell--{{t[6]}}-col mdl-shadow--2dp">
-        <div class="mdl-card__title">
-          <h3 class="mdl-card__title-text"> <a href="{{ url_for(t[4]) }}">{{t[0]}}</a></h3>
-          <div class="mdl-card__date">Date: {{t[3]}}</div>
-        </div>
-        <div class="mdl-card__actions mdl-card--border"></div>
-        <div class="mdl-card__text-background">
-          <div class="mdl-card__supporting-text">
-            {% for p in t[2] %}
-              <p>{{p}}</p>
-            {% endfor %}
+    <div class="mdl-grid demo-blog__posts">
+
+      {% for t in TOPIC_DICT["DATA"] %}
+        <div class="{{t[1]}} mdl-card mdl-cell mdl-cell--8-col mdl-cell--{{t[6]}}-col-desktop mdl-shadow--2dp">
+          <div class="mdl-card__title">
+            <h3 class="mdl-card__title-text"> <a href="{{ url_for(t[4]) }}">{{t[0]}}</a></h3>
+            <div class="mdl-card__date">Date: {{t[3]}}</div>
           </div>
-          <div class="mdl-card__supporting-chips">
-            {% for c in t[5] %}
-              <span class="mdl-chip">
-                <span class="mdl-chip__text">{{c}}</span>
-              </span>
-            {% endfor %}
+          <div class="mdl-card__actions mdl-card--border"></div>
+          <div class="mdl-card__text-background">
+            <div class="mdl-card__supporting-text">
+              {% for p in t[2] %}
+                <p>{{p}}</p>
+              {% endfor %}
+            </div>
+            <div class="mdl-card__supporting-chips">
+              {% for c in t[5] %}
+                <span class="mdl-chip">
+                  <span class="mdl-chip__text">{{c}}</span>
+                </span>
+              {% endfor %}
+            </div>
           </div>
         </div>
-      </div>
-    {% endfor %}
+      {% endfor %}
+
+    </div>
 
   </main>
   <!-- <div class="seethrough-card mdl-card mdl-cell mdl-cell--6-col mdl-shadow--2dp">

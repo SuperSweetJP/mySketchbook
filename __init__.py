@@ -1,16 +1,31 @@
-from distutils.log import error
+# from distutils.log import error
 from wsgiref.simple_server import make_server
 from flask import Flask, render_template, redirect, request, url_for, session, jsonify, make_response
 from flask_session import Session
 import json
-from .content_management import Content
-#from content_management import Content
+#from .content_management import _load_diary_posts
+#from .content_management import Content
+# from content_management import Content
+# from content_management import _load_diary_posts
+try:
+    from .content_management import Content
+    from .content_management import _load_blog_posts
+    from .utils.html_post import wrap_all_markdown_imgs
+except ImportError:
+    from content_management import Content
+    from content_management import _load_blog_posts
+    from utils.html_post import wrap_all_markdown_imgs
 import mysql.connector
 from dotenv import load_dotenv, find_dotenv
 import os
 import sentry_sdk
 from flask import Flask
 from sentry_sdk.integrations.flask import FlaskIntegration
+from pathlib import Path
+
+
+BASE_DIR = Path(__file__).resolve().parent
+BLOG_DIR = BASE_DIR / "static" / "blog"
 
 TOPIC_DICT, TAB_DICT, CAR_MAKE_DICT = Content()
 
@@ -41,7 +56,7 @@ load_dotenv(find_dotenv())
 @app.route("/")
 def hello():
     # return render_template("3d.html", TOPIC_DICT = TOPIC_DICT, TAB_DICT = TAB_DICT)
-    return redirect('/data/')
+    return redirect('/blog/')
 
 
 @app.errorhandler(404)
@@ -159,18 +174,18 @@ def web_scraper():
         elif(CAR_MAKE_DICT[selected_make]):
             # alter sql queries and parms if model selected
             if(selected_model != ''):
-                sqlSelectCount = "SELECT COUNT(*) from CarsTable WHERE Category = %s AND Marka = %s"
+                sqlSelectCount = "SELECT COUNT(*) from CarsTable WHERE Category = %s AND Marka = %s and Year >= YEAR(CURDATE()) - 1"
                 sqlSelectFrequency = """SELECT T1.yearMonth, Count(T2.RecId) as Count FROM calendarTable T1
                                 LEFT JOIN CarsTable T2 on T1.db_date = T2.DateFirst and T2.Category = %s and T2.Marka = %s
-                                WHERE T1.db_date < CURDATE()
+                                WHERE T1.db_date < CURDATE() and Year >= YEAR(CURDATE()) - 1
                                 GROUP BY T1.YearMonth"""
                 sqlSelect = "SELECT Marka, GadsMod, Motors, Karba, Nobr, Virsb, Skate, Cena, date(FirstSeen), date(LastSeen), DATEDIFF(LastSeen, FirstSeen) AS UpForDays from CarsTable WHERE Category = %s AND Marka = %s order by LastSeen desc Limit 30"
                 parm = (CAR_MAKE_DICT[selected_make], selected_model)
             else:
-                sqlSelectCount = "SELECT COUNT(*) from CarsTable WHERE Category = %s"
+                sqlSelectCount = "SELECT COUNT(*) from CarsTable WHERE Category = %s and Year >= YEAR(CURDATE()) - 1"
                 sqlSelectFrequency = """SELECT T1.yearMonth, Count(T2.RecId) as Count FROM calendarTable T1
                                 LEFT JOIN CarsTable T2 on T1.db_date = T2.DateFirst and T2.Category = %s
-                                WHERE T1.db_date < CURDATE()
+                                WHERE T1.db_date < CURDATE() and Year >= YEAR(CURDATE()) - 1
                                 GROUP BY T1.YearMonth"""
                 sqlSelect = "SELECT Marka, GadsMod, Motors, Karba, Nobr, Virsb, Skate, Cena, date(FirstSeen), date(LastSeen), DATEDIFF(LastSeen, FirstSeen) AS UpForDays from CarsTable WHERE Category = %s order by LastSeen desc Limit 30"
                 parm = (CAR_MAKE_DICT[selected_make], )
@@ -275,6 +290,52 @@ def get_frequency_data():
     freqDict = jsonify(freqDict)
 
     return freqDict.data
+
+
+@app.route("/blog/")
+def blog_index():
+    blog_cards = _load_blog_posts()
+    return render_template("blog_index.html",
+                           TOPIC_DICT=TOPIC_DICT, TAB_DICT=TAB_DICT,
+                           BLOG_CARDS=blog_cards)
+
+@app.route("/blog/<slug>/")
+def blog_detail(slug):
+    # Resolve file by slug prefix "<date>-<slugified-title>.md"
+    # import pathlib, os
+    # path = None
+    # for p in BLOG_DIR.glob("*.md"):
+    #     # we open the file where slug matches the file name
+    #     if p.stem == slug:
+    #         path = p
+    #         break
+    # if not path:
+    #     return render_template("404.html", TOPIC_DICT=TOPIC_DICT, TAB_DICT=TAB_DICT), 404
+    # with path.open("r", encoding="utf-8") as f:
+    #     title = f.readline().strip()
+    #     date = f.readline().strip()
+    #     tags = [t.strip() for t in f.readline().split(",")] if True else []
+    #     body_md = f.read()
+
+     # [Title, CardType, SupportingText, Date, Link, [Chips], Width, body]
+    post = _load_blog_posts(slug)
+    print(post)
+    title = post[0]
+    date = post[3]
+    tags = post[5]
+    body_md = post[7]
+
+    # render markdown (simple, built-in fallback)
+    try:
+        import markdown
+        body_html = markdown.markdown(body_md, extensions=["fenced_code", "tables", "codehilite"])
+        body_html = wrap_all_markdown_imgs(body_html)
+    except Exception:
+        # very basic fallback: paragraphs
+        body_html = "".join(f"<p>{line}</p>" for line in body_md.split("\n\n"))
+    return render_template("blog_entry.html",
+                           TOPIC_DICT=TOPIC_DICT, TAB_DICT=TAB_DICT,
+                           title=title, date=date, tags=tags, body_html=body_html)
 
 
 def getMyCursor(_sqlSelect, _parm=None, _dict=False):

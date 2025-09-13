@@ -79,8 +79,6 @@ function animate() {
   requestAnimationFrame( animate );
   controls.update();
   renderer.render( scene, camera );
-
-  console.log(camera.position);
 }
 
 function onWindowResize() {

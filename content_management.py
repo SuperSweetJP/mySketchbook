@@ -1,9 +1,62 @@
+import os, re, datetime, pathlib
+from typing import List, Dict, Any
+
+BLOG_DIR = pathlib.Path(__file__).resolve().parent / "static" / "blog"
+
+# def _slugify(s: str) -> str:
+#     return re.sub(r'[^a-z0-9\-]', '-', s.lower()).strip('-')
+
+def _parse_file(path):
+    return
+
+def _load_blog_posts(slug = None) -> List[Dict[str, Any]]:
+    posts = []
+    if not BLOG_DIR.exists():
+        return posts
+    
+    for p in BLOG_DIR.glob("*.md"):
+        try:
+            with p.open("r", encoding="utf-8") as f:
+                header = [next(f).rstrip("\n") for _ in range(3)]
+                title = header[0].strip()
+                supporting_text = header[2].strip()
+                # tags = [t.strip() for t in header[2].split(",")] if header[2].strip() else []
+
+                # filename will follow this pattern: YYYYMMDD-entry.md
+                parts = p.stem.split("-", 1)
+                body = f.read()
+
+                # [Title, CardType, SupportingText, Date, Link, [Chips], Width, body]
+                card = ([
+                    title,
+                    "seethrough-card",
+                    supporting_text,
+                    datetime.datetime.strptime(parts[0], "%Y%m%d").strftime("%d/%m/%Y"),
+                    f"blog/{p.stem}",
+                    [],
+                    12,
+                    body
+                ])
+
+                if slug:
+                    if p.stem == slug:
+                        return card
+                else:
+                    posts.append(card)
+            
+        except Exception as e:
+            print(e)
+            continue
+    # newest first
+    print(len(posts))
+    posts.sort(key=lambda c: datetime.datetime.strptime(c[3], "%d/%m/%Y"), reverse=True)
+    return posts
 
 def Content():
-
     TAB_DICT = {
         "3D" : "threeD",
-        "DATA" : "data"
+        "VP" : "data",
+        "Journey" : "blog_index"
     }
 
     TOPIC_DICT = {
@@ -125,7 +178,7 @@ def Content():
                     "17/05/2022", 
                     "vp_data_dashboard", 
                     ["Python", "Flask", "D3.js"],
-                    4,
+                    6,
                     # r"img/gifs/ClampQuaternion.gif"
                 ],
                 [
@@ -138,10 +191,11 @@ def Content():
                     "23/04/2022", 
                     "web_scraper", 
                     ["Python", "MySQL", "WebScraper"],
-                    4,
+                    6,
                     # r"img/gifs/ClampQuaternion.gif"
                 ]
-            ]
+            ],
+        "DIARY": _load_blog_posts()
     }
 
     CAR_MAKE_DICT = {
