@@ -48,7 +48,6 @@ def _load_blog_posts(slug = None) -> List[Dict[str, Any]]:
             print(e)
             continue
     # newest first
-    print(len(posts))
     posts.sort(key=lambda c: datetime.datetime.strptime(c[3], "%d/%m/%Y"), reverse=True)
     return posts
 

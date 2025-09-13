@@ -177,7 +177,7 @@ def web_scraper():
                 sqlSelectCount = "SELECT COUNT(*) from CarsTable WHERE Category = %s AND Marka = %s and Year >= YEAR(CURDATE()) - 1"
                 sqlSelectFrequency = """SELECT T1.yearMonth, Count(T2.RecId) as Count FROM calendarTable T1
                                 LEFT JOIN CarsTable T2 on T1.db_date = T2.DateFirst and T2.Category = %s and T2.Marka = %s
-                                WHERE T1.db_date < CURDATE() and Year >= YEAR(CURDATE()) - 1
+                                WHERE T1.db_date < CURDATE() and T1.Year >= YEAR(CURDATE()) - 1
                                 GROUP BY T1.YearMonth"""
                 sqlSelect = "SELECT Marka, GadsMod, Motors, Karba, Nobr, Virsb, Skate, Cena, date(FirstSeen), date(LastSeen), DATEDIFF(LastSeen, FirstSeen) AS UpForDays from CarsTable WHERE Category = %s AND Marka = %s order by LastSeen desc Limit 30"
                 parm = (CAR_MAKE_DICT[selected_make], selected_model)
@@ -185,7 +185,7 @@ def web_scraper():
                 sqlSelectCount = "SELECT COUNT(*) from CarsTable WHERE Category = %s and Year >= YEAR(CURDATE()) - 1"
                 sqlSelectFrequency = """SELECT T1.yearMonth, Count(T2.RecId) as Count FROM calendarTable T1
                                 LEFT JOIN CarsTable T2 on T1.db_date = T2.DateFirst and T2.Category = %s
-                                WHERE T1.db_date < CURDATE() and Year >= YEAR(CURDATE()) - 1
+                                WHERE T1.db_date < CURDATE() and T1.Year >= YEAR(CURDATE()) - 1
                                 GROUP BY T1.YearMonth"""
                 sqlSelect = "SELECT Marka, GadsMod, Motors, Karba, Nobr, Virsb, Skate, Cena, date(FirstSeen), date(LastSeen), DATEDIFF(LastSeen, FirstSeen) AS UpForDays from CarsTable WHERE Category = %s order by LastSeen desc Limit 30"
                 parm = (CAR_MAKE_DICT[selected_make], )
@@ -301,25 +301,8 @@ def blog_index():
 
 @app.route("/blog/<slug>/")
 def blog_detail(slug):
-    # Resolve file by slug prefix "<date>-<slugified-title>.md"
-    # import pathlib, os
-    # path = None
-    # for p in BLOG_DIR.glob("*.md"):
-    #     # we open the file where slug matches the file name
-    #     if p.stem == slug:
-    #         path = p
-    #         break
-    # if not path:
-    #     return render_template("404.html", TOPIC_DICT=TOPIC_DICT, TAB_DICT=TAB_DICT), 404
-    # with path.open("r", encoding="utf-8") as f:
-    #     title = f.readline().strip()
-    #     date = f.readline().strip()
-    #     tags = [t.strip() for t in f.readline().split(",")] if True else []
-    #     body_md = f.read()
-
      # [Title, CardType, SupportingText, Date, Link, [Chips], Width, body]
     post = _load_blog_posts(slug)
-    print(post)
     title = post[0]
     date = post[3]
     tags = post[5]

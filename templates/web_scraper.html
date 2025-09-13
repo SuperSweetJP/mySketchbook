@@ -12,7 +12,6 @@
   <!-- <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div> -->
   <div class="dashboard-card mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell--12-col-tablet mdl-cell--12-col-desktop  mdl-cell--12-col-mobile mdl-cell--stretch">
     <h3>Vehicle Project Data</h3>
-      <p> Note, period of 202108-202110 is missing from the data due to power outtage.. </p>
       <form class="ui form" action = "{{ url_for('web_scraper') }}" method = "post">
         <!-- Make dropdown -->
         {% if selected_make != '' %}

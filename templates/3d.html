@@ -3,16 +3,8 @@
 {% block body %}
   <script src="{{ url_for('static', filename='node_modules/three/build/three.js')}}"></script>
   <script src="{{ url_for('static', filename='js/blankBg.js')}}"></script>
-  <!-- <script src="{{ url_for('static', filename='node_modules/three/examples/js/controls/OrbitControls.js')}}"></script>
-  <script src="{{ url_for('static', filename='node_modules/three/examples/js/loaders/FontLoader.js')}}"></script>
-  <script src="{{ url_for('static', filename='js/3dBarChart.js')}}"></script>
-  <script src="{{ url_for('static', filename='js/3dDataDev.js')}}"></script> -->
-  <!-- <script src="{{ url_for('static', filename='js/text.js')}}"></script> -->
-
 
   <main class="mdl-layout__content">
-
-
     <div class="mdl-grid demo-blog__posts">
 
       {% for t in TOPIC_DICT["3D"] %}
@@ -37,7 +29,6 @@
               </div>
               </p>
               {% endif %}
-              <!-- <img src="{{ url_for('static', filename='img/gifs/ClampQuaternion.gif')}}" alt="clamp quaternion"  width="500" /> -->
               {{t[2]}}
             </div>
             <div class="mdl-card__supporting-chips">
@@ -50,8 +41,45 @@
           </div>
         </div>
       {% endfor %}
-  
+
+      <button type="button" id="backToTop" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+        <i class="material-icons">arrow_upward</i>
+      </button>
+
+      <script>
+        const btn = document.getElementById('backToTop');
+        const scroller = document.querySelector('.mdl-layout');
+        const showAt = 460;
+
+        function toggle() { 
+          console.log(scroller.scrollTop)
+          btn.style.display = scroller.scrollTop > showAt ? 'block' : 'none';
+        }
+        toggle();
+        scroller.addEventListener('scroll', toggle, { passive: true });
+
+        btn.addEventListener('click', function () {
+          document.getElementById('top-anchor').scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        });
+      </script>
     </div>
   </main>
 
+
+  <style>
+    #backToTop {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      display: none;
+      z-index: 999;
+    }
+  </style>
   {% endblock %}
+
+<style>
+  html, body, .mdl-layout__content { scroll-behavior: smooth; }
+</style>
